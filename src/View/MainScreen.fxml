@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.Controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.MainScreenController">
     <top>
         <Label text="Inventory Management System" BorderPane.alignment="CENTER_LEFT">
             <BorderPane.margin>
@@ -47,7 +47,7 @@
                                         <Font name="System Bold" size="18.0" />
                                     </font>
                                 </Label>
-                                <Button mnemonicParsing="false"  text="Search">
+                                <Button mnemonicParsing="false" onAction="#onActionPartSearch"  text="Search">
                                     <HBox.margin>
                                         <Insets right="10.0" top="15.0" />
                                     </HBox.margin>
@@ -62,7 +62,7 @@
                                 </TextField>
                             </children>
                         </HBox>
-                        <TableView fx:id="partsTableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                        <TableView fx:id="partTableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                             <columns>
                                 <TableColumn fx:id="partIdCol" minWidth="122.75" prefWidth="75.0" text="Part ID" />
                                 <TableColumn fx:id="partNameCol" minWidth="122.75" prefWidth="75.0" text="Part Name" />
@@ -139,7 +139,7 @@
                                 <Insets />
                             </VBox.margin>
                         </HBox>
-                        <TableView fx:id="productsTableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="486.0">
+                        <TableView fx:id="productTableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="486.0">
                             <columns>
                                 <TableColumn fx:id="productIdCol" minWidth="122.75" prefWidth="75.0" text="Product ID" />
                                 <TableColumn fx:id="productNameCol" minWidth="122.75" prefWidth="75.0" text="Product Name" />
