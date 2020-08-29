@@ -7,11 +7,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.util.Optional;
 
 
 public class MainScreenController {
@@ -54,6 +57,66 @@ public class MainScreenController {
 
   @FXML
   private TableColumn<Product, Double> productPriceCol;
+
+  @FXML
+  void onActionAddPart(ActionEvent event) throws IOException {
+
+    stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+    scene = FXMLLoader.load(getClass().getResource("/view/AddPartView.fxml"));
+    stage.setScene(new Scene(scene));
+    stage.show();
+
+  }
+  @FXML
+  void onActionAddProduct(ActionEvent event) throws IOException {
+
+    stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+    scene = FXMLLoader.load(getClass().getResource("/view/AddProductView.fxml"));
+    stage.setScene(new Scene(scene));
+    stage.show();
+
+  }
+  @FXML
+  void onActionModifyPart(ActionEvent event) throws IOException {
+
+    try {
+      // Specify which view to load
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("/View/ModifyPartView.fxml"));
+      loader.load();
+
+      ModifyPartController modPartController = loader.getController();
+      modPartController.sendPartInfo(partTableView.getSelectionModel().getSelectedItem());
+
+      stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+      Parent scene = loader.getRoot();
+      stage.setScene(new Scene(scene));
+      stage.show();
+    } catch (NullPointerException e) {
+      System.out.println("Exception: " + e);
+      System.out.println("No part selected!");
+    }
+
+  }
+
+  @FXML
+  void onActionDeletePart(ActionEvent event) {
+
+    if(partTableView.getSelectionModel().getSelectedItem() != null) {
+
+      Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will delete the part, do you want to continue?");
+      alert.setTitle("CONFIRMATION");
+
+      Optional<ButtonType> result = alert.showAndWait();
+
+      if (result.isPresent() && result.get() == ButtonType.OK) {
+        Inventory.deletePart(partTableView.getSelectionModel().getSelectedItem());
+      }
+    } else {
+      System.out.println("No part has been selected");
+    }
+  }
+
 
   @FXML
   public void onActionExit(ActionEvent e) {
