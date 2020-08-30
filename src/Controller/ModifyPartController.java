@@ -76,20 +76,19 @@ public class ModifyPartController implements Initializable {
 
     Optional<ButtonType> result = alert.showAndWait();
 
-    if (!result.isPresent() || result.get() != ButtonType.OK) {
-      return;
+    if(result.isPresent() && result.get() == ButtonType.OK) {
+      stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+      scene = FXMLLoader.load(getClass().getResource("/View/MainScreen.fxml"));
+      stage.setScene(new Scene(scene));
+      stage.show();
     }
-    stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-    scene = FXMLLoader.load(getClass().getResource("/view/MainScreenView.fxml"));
-    stage.setScene(new Scene(scene));
-    stage.show();
 
   }
 
   @FXML
   void onActionSave(ActionEvent event) throws IOException {
 
-    //Exception handling if-statement
+
     if (Integer.parseInt(partStockField.getText()) >= Integer.parseInt(partMaxField.getText()) || Integer.parseInt(partStockField.getText()) <= Integer.parseInt(partMinField.getText())) {
       Alert alert = new Alert(Alert.AlertType.ERROR);
       alert.setTitle("Error");
@@ -119,11 +118,9 @@ public class ModifyPartController implements Initializable {
               part.setMin(min);
 
               ((InHouse) part).setMachineId(Integer.parseInt(modPartVariableField.getText()));
-              break;
             } else {
               Part inHousePart = new InHouse(id, name, price,stock,min,max, Integer.parseInt(modPartVariableField.getText()));
               Inventory.updatePart(partIndex, inHousePart);
-              break;
             }
           } else {
             if(part instanceof Outsourced) {
@@ -134,17 +131,16 @@ public class ModifyPartController implements Initializable {
               part.setMin(min);
 
               ((Outsourced) part).setCompanyName(modPartVariableField.getText());
-              break;
             } else {
               Part outSrcPart = new Outsourced(id, name, price, stock, min, max, modPartVariableField.getText());
               Inventory.updatePart(partIndex, outSrcPart);
-              break;
             }
           }
+          break;
         }
       }
       stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-      scene = FXMLLoader.load(getClass().getResource("/view/MainScreenView.fxml"));
+      scene = FXMLLoader.load(getClass().getResource("/View/MainScreen.fxml"));
       stage.setScene(new Scene(scene));
       stage.show();
     }
@@ -152,14 +148,14 @@ public class ModifyPartController implements Initializable {
 
   public void sendPartInfo(Part part) {
 
-    if(part instanceof InHouse) {
-      modPartInHouse.setSelected(true);
-      modPartVariableName.setText("Machine ID:");
-      modPartVariableField.setText(String.valueOf(((InHouse) part).getMachineId()));
-    } else {
+    if (!(part instanceof InHouse)) {
       modPartOutsourced.setSelected(true);
       modPartVariableName.setText("Company Name:");
       modPartVariableField.setText(((Outsourced) part).getCompanyName());
+    } else {
+      modPartInHouse.setSelected(true);
+      modPartVariableName.setText("Machine ID:");
+      modPartVariableField.setText(String.valueOf(((InHouse) part).getMachineId()));
     }
 
     partIdField.setText(String.valueOf(part.getId()));

@@ -8,16 +8,20 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 
-public class MainScreenController {
+public class MainScreenController implements Initializable {
 
   Stage stage;
   Parent scene;
@@ -58,6 +62,7 @@ public class MainScreenController {
   @FXML
   private TableColumn<Product, Double> productPriceCol;
 
+
   @FXML
   void onActionAddPart(ActionEvent event) throws IOException {
 
@@ -67,6 +72,7 @@ public class MainScreenController {
     stage.show();
 
   }
+
   @FXML
   void onActionAddProduct(ActionEvent event) throws IOException {
 
@@ -76,6 +82,50 @@ public class MainScreenController {
     stage.show();
 
   }
+
+  @FXML
+  void onActionDeletePart(ActionEvent event) {
+
+    if(partTableView.getSelectionModel().getSelectedItem() != null) {
+
+      Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will permanently delete the part, do you want to continue?");
+      alert.setTitle("CONFIRMATION");
+
+      Optional<ButtonType> result = alert.showAndWait();
+
+      if (result.isPresent() && result.get() == ButtonType.OK) {
+        Inventory.deletePart(partTableView.getSelectionModel().getSelectedItem());
+      }
+    } else {
+      System.out.println("No part selected");
+    }
+  }
+
+  @FXML
+  void onActionDeleteProduct(ActionEvent event) {
+
+    if(productTableView.getSelectionModel().getSelectedItem() != null) {
+
+      Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will permanently delete the product, do you want to continue?");
+      alert.setTitle("CONFIRMATION");
+
+      Optional<ButtonType> result = alert.showAndWait();
+
+      if (result.isPresent() && result.get() == ButtonType.OK) {
+        Inventory.deleteProduct(productTableView.getSelectionModel().getSelectedItem());
+      }
+    } else {
+      System.out.println("No product selected.");
+    }
+  }
+
+  @FXML
+  void onActionExit(ActionEvent event) {
+
+    System.exit(0);
+
+  }
+
   @FXML
   void onActionModifyPart(ActionEvent event) throws IOException {
 
@@ -100,41 +150,43 @@ public class MainScreenController {
   }
 
   @FXML
-  void onActionDeletePart(ActionEvent event) {
+  void onActionModifyProduct(ActionEvent event) throws IOException {
 
-    if(partTableView.getSelectionModel().getSelectedItem() != null) {
+    try {
+      // Specify which view to load
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("/View/ModifyProductView.fxml"));
+      loader.load();
 
-      Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will delete the part, do you want to continue?");
-      alert.setTitle("CONFIRMATION");
+      ModifyProductController modProdController = loader.getController();
+      modProdController.sendProductInfo(productTableView.getSelectionModel().getSelectedItem());
 
-      Optional<ButtonType> result = alert.showAndWait();
-
-      if (result.isPresent() && result.get() == ButtonType.OK) {
-        Inventory.deletePart(partTableView.getSelectionModel().getSelectedItem());
-      }
-    } else {
-      System.out.println("No part has been selected");
+      stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+      Parent scene = loader.getRoot();
+      stage.setScene(new Scene(scene));
+      stage.show();
+    } catch (NullPointerException e) {
+      System.out.println("Exception: " + e);
+      System.out.println("No product selected!");
     }
-  }
-
-
-  @FXML
-  public void onActionExit(ActionEvent e) {
-
-    System.exit(0);
 
   }
 
   @FXML
-  public void onActionPartSearch(ActionEvent actionEvent) {
+  void onActionPartsSearch(ActionEvent event) {
+
     String partInput = partSearchField.getText();
 
     try {
-      int partId = Integer.valueOf(partInput);
+      int partId = Integer.parseInt(partInput);
       ObservableList<Part> searchResult = FXCollections.observableArrayList();
       searchResult.add(Inventory.lookupPart(partId));
 
-      partTableView.setItems(searchResult.get(0) == null ? Inventory.getAllParts() : searchResult);
+      if (searchResult.get(0) == null) {
+        partTableView.setItems(Inventory.getAllParts());
+      } else {
+        partTableView.setItems(searchResult);
+      }
     } catch (NumberFormatException e) {
       partTableView.setItems(Inventory.lookupPart(partInput));
     }
@@ -146,17 +198,43 @@ public class MainScreenController {
     String productInput = productSearchField.getText();
 
     try {
-      int productId = Integer.valueOf(productInput);
+      int productId = Integer.parseInt(productInput);
       ObservableList<Product> searchResult = FXCollections.observableArrayList();
       searchResult.add(Inventory.lookupProduct(productId));
 
-      productTableView.setItems(searchResult.get(0) == null ? Inventory.getAllProducts() : searchResult);
+      if(searchResult.get(0) == null) {
+        productTableView.setItems(Inventory.getAllProducts());
+      } else {
+        productTableView.setItems(searchResult);
+      }
     } catch (NumberFormatException e) {
       productTableView.setItems(Inventory.lookupProduct(productInput));
     }
 
   }
 
+  @Override
+  public void initialize(URL url, ResourceBundle rb) {
+    // Set Parts table view
+    partTableView.setItems(Inventory.getAllParts());
+
+    // Fill Parts column with values
+    partIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+    partNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+    partInventoryCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
+    partPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+    // Set Products table view
+    productTableView.setItems(Inventory.getAllProducts());
+
+    // Fill Products column with values
+
+    productIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+    productNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+    productInventoryCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
+    productPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+  }
 
 }
 
