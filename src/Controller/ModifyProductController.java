@@ -100,7 +100,7 @@ public class ModifyProductController implements Initializable {
   void onActionDeletePart(ActionEvent event) {
 
     if(associatedPartsTableView.getSelectionModel().getSelectedItem() != null) {
-      Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will permanently delete the part, do you want to continue?");
+      Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will delete the part permanently, do you want to continue?");
       alert.setTitle("CONFIRMATION");
 
       Optional<ButtonType> result = alert.showAndWait();
@@ -114,7 +114,7 @@ public class ModifyProductController implements Initializable {
   @FXML
   void onActionReturnToMainScreen(ActionEvent event) throws IOException {
 
-    Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Changes wont be saved, continue?");
+    Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Changes wont be saved, do you want to continue?");
     alert.setTitle("CONFIRMATION");
 
     Optional<ButtonType> result = alert.showAndWait();
@@ -130,7 +130,12 @@ public class ModifyProductController implements Initializable {
   @FXML
   void onActionSave(ActionEvent event) throws IOException {
 
-    if (Integer.parseInt(productStockField.getText()) < Integer.parseInt(productMaxField.getText()) && Integer.parseInt(productStockField.getText()) > Integer.parseInt(productMinField.getText())) {
+    if (Integer.parseInt(productStockField.getText()) >= Integer.parseInt(productMaxField.getText()) || Integer.parseInt(productStockField.getText()) <= Integer.parseInt(productMinField.getText())) {
+      Alert alert = new Alert(Alert.AlertType.ERROR);
+      alert.setTitle("Error");
+      alert.setContentText("Please make sure that inventory number is greater than minimum and less than the maximum value.");
+      alert.showAndWait();
+    } else {
 
       int id = Integer.parseInt(productIdField.getText());
       String name = productNameField.getText();
@@ -141,27 +146,21 @@ public class ModifyProductController implements Initializable {
 
       for (Product product : Inventory.getAllProducts()) {
 
-        if (product.getId() == id) {
+        if (product.getId() != id) continue;
 
-          int productIndex = Inventory.getAllProducts().indexOf(product);
+        int productIndex = Inventory.getAllProducts().indexOf(product);
 
-          Product modifiedProduct = new Product(id, name, price, stock, min, max);
+        Product modifiedProduct = new Product(id, name, price, stock, min, max);
 
-          modifiedProduct.getAllAssociatedParts().setAll(modifiedAssociatedParts);
+        modifiedProduct.getAllAssociatedParts().setAll(modifiedAssociatedParts);
 
-          Inventory.updateProduct(productIndex, modifiedProduct);
-        }
+        Inventory.updateProduct(productIndex, modifiedProduct);
       }
 
       stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
       scene = FXMLLoader.load(getClass().getResource("/view/MainScreenView.fxml"));
       stage.setScene(new Scene(scene));
       stage.show();
-    } else {
-      Alert alert = new Alert(Alert.AlertType.ERROR);
-      alert.setTitle("Error");
-      alert.setContentText("Please make sure that inventory quantity is greater than minimum and less than the maximum value.");
-      alert.showAndWait();
     }
   }
 
@@ -175,10 +174,10 @@ public class ModifyProductController implements Initializable {
       ObservableList<Part> searchResult = FXCollections.observableArrayList();
       searchResult.add(Inventory.lookupPart(partId));
 
-      if (searchResult.get(0) == null) {
-        inventoryPartsTableView.setItems(Inventory.getAllParts());
-      } else {
+      if (searchResult.get(0) != null) {
         inventoryPartsTableView.setItems(searchResult);
+      } else {
+        inventoryPartsTableView.setItems(Inventory.getAllParts());
       }
     } catch (NumberFormatException e) {
       inventoryPartsTableView.setItems(Inventory.lookupPart(partInput));

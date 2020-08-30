@@ -112,31 +112,33 @@ public class AddProductController implements Initializable {
   void onActionDeletePart(ActionEvent event) {
 
     if (associatedPartsTableView.getSelectionModel().getSelectedItem() != null) {
-      Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will permanently delete the part, do you want to continue?");
+      Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Part will be permanently deleted, do you want to continue?");
       alert.setTitle("CONFIRMATION");
 
       Optional<ButtonType> result = alert.showAndWait();
 
-      if (result.isPresent() && result.get() == ButtonType.OK) {
-        tempAssociatedPartsList.remove(associatedPartsTableView.getSelectionModel().getSelectedItem());
+      if (!result.isPresent() || result.get() != ButtonType.OK) {
+        return;
       }
+      tempAssociatedPartsList.remove(associatedPartsTableView.getSelectionModel().getSelectedItem());
     }
   }
 
   @FXML
   void onActionReturnToMainScreen(ActionEvent event) throws IOException {
 
-    Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Changes wont be saved, continue?");
+    Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Changes wont be saved, do you want to continue?");
     alert.setTitle("CONFIRMATION");
 
     Optional<ButtonType> result = alert.showAndWait();
 
-    if (result.isPresent() && result.get() == ButtonType.OK) {
-      stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-      scene = FXMLLoader.load(getClass().getResource("/view/MainScreen.fxml"));
-      stage.setScene(new Scene(scene));
-      stage.show();
+    if (!result.isPresent() || result.get() != ButtonType.OK) {
+      return;
     }
+    stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+    scene = FXMLLoader.load(getClass().getResource("/view/MainScreen.fxml"));
+    stage.setScene(new Scene(scene));
+    stage.show();
 
   }
 
@@ -150,22 +152,20 @@ public class AddProductController implements Initializable {
     int min = Integer.parseInt(addProductMin.getText());
     int max = Integer.parseInt(addProductMax.getText());
 
-    if (stock < max && stock > min) {
+    if (stock >= max || stock <= min) {
+      Alert alert = new Alert(Alert.AlertType.ERROR);
+      alert.setTitle("Error");
+      alert.setContentText("Please make sure that inventory quantity is greater than minimum and less than the maximum value.");
+      alert.showAndWait();
+    } else {
       Inventory.addProduct(new Product(id, name, price, stock, min, max));
 
-      for (Part tempPart : tempAssociatedPartsList) {
-        Inventory.getAllProducts().get(Inventory.getAllProducts().size() - 1).addAssociatedPart(tempPart);
-      }
+      tempAssociatedPartsList.forEach(tempPart -> Inventory.getAllProducts().get(Inventory.getAllProducts().size() - 1).addAssociatedPart(tempPart));
 
       stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
       scene = FXMLLoader.load(getClass().getResource("/view/MainScreen.fxml"));
       stage.setScene(new Scene(scene));
       stage.show();
-    } else {
-      Alert alert = new Alert(Alert.AlertType.ERROR);
-      alert.setTitle("Error");
-      alert.setContentText("Please make sure that inventory quantity is greater than minimum and less than the maximum value.");
-      alert.showAndWait();
     }
 
   }
@@ -180,11 +180,7 @@ public class AddProductController implements Initializable {
       ObservableList<Part> searchResult = FXCollections.observableArrayList();
       searchResult.add(Inventory.lookupPart(partId));
 
-      if (searchResult.get(0) == null) {
-        inventoryPartsTableView.setItems(Inventory.getAllParts());
-      } else {
-        inventoryPartsTableView.setItems(searchResult);
-      }
+      inventoryPartsTableView.setItems(searchResult.get(0) == null ? Inventory.getAllParts() : searchResult);
     } catch (NumberFormatException e) {
       inventoryPartsTableView.setItems(Inventory.lookupPart(partInput));
     }
