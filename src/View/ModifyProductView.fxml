@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="500.0" minWidth="750.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ModifyProductController">
     <children>
-        <HBox layoutX="23.0" layoutY="23.0" minHeight="500.0" minWidth="850.0" style="-fx-border-color: #000000; -fx-border-width: 2; -fx-border-radius: 15;">
+        <HBox layoutX="23.0" layoutY="23.0" minHeight="500.0" minWidth="850.0">
             <children>
                 <VBox minWidth="350.0">
                     <children>
@@ -188,4 +198,3 @@
         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
     </padding>
 </Pane>
-

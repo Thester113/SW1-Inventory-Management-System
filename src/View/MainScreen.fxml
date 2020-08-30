@@ -18,7 +18,7 @@
                 <Insets bottom="20.0" left="20.0" top="20.0" />
             </BorderPane.margin>
             <font>
-                <Font name="System Bold" size="18.0" />
+                <Font name="System Bold" size="24.0" />
             </font>
         </Label>
     </top>
@@ -35,7 +35,7 @@
     <center>
         <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <children>
-                <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="308.0" minWidth="525.0" prefWidth="525.0" style="-fx-border-color: #26282b; -fx-border-width: 2; -fx-border-radius: 15;">
+                <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="308.0" minWidth="525.0" prefWidth="525.0" style="-fx-border-width: 2;">
                     <children>
                         <HBox prefHeight="66.0" prefWidth="516.0">
                             <children>
@@ -106,7 +106,7 @@
                         <Insets left="20.0" right="10.0" />
                     </HBox.margin>
                 </VBox>
-                <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="308.0" minWidth="525.0" prefWidth="525.0" style="-fx-border-color: #26282b; -fx-border-width: 2; -fx-border-radius: 15;">
+                <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="308.0" minWidth="525.0" prefWidth="525.0">
                     <opaqueInsets>
                         <Insets />
                     </opaqueInsets>

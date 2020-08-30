@@ -21,6 +21,19 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class ModifyProductController implements Initializable {
+  @Override
+  public void initialize(URL url, ResourceBundle rb) {
+
+    // Set Parts table view
+    inventoryPartsTableView.setItems(Inventory.getAllParts());
+
+    // Fill Parts column with values
+    inventoryPartId.setCellValueFactory(new PropertyValueFactory<>("id"));
+    inventoryPartName.setCellValueFactory(new PropertyValueFactory<>("name"));
+    inventoryStockLevel.setCellValueFactory(new PropertyValueFactory<>("stock"));
+    inventoryPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+  }
 
   Stage stage;
   Parent scene;
@@ -193,21 +206,6 @@ public class ModifyProductController implements Initializable {
     associatedPartName.setCellValueFactory(new PropertyValueFactory<>("name"));
     associatedStockLevel.setCellValueFactory(new PropertyValueFactory<>("stock"));
     associatedPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
-
-  }
-
-
-  @Override
-  public void initialize(URL url, ResourceBundle rb) {
-
-    // Set Parts table view
-    inventoryPartsTableView.setItems(Inventory.getAllParts());
-
-    // Fill Parts column with values
-    inventoryPartId.setCellValueFactory(new PropertyValueFactory<>("id"));
-    inventoryPartName.setCellValueFactory(new PropertyValueFactory<>("name"));
-    inventoryStockLevel.setCellValueFactory(new PropertyValueFactory<>("stock"));
-    inventoryPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
 
   }
 

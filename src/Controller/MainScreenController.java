@@ -22,6 +22,27 @@ import java.util.ResourceBundle;
 
 
 public class MainScreenController implements Initializable {
+  @Override
+  public void initialize(URL url, ResourceBundle rb) {
+
+    partTableView.setItems(Inventory.getAllParts());
+
+
+    partIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+    partNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+    partInventoryCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
+    partPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+
+    productTableView.setItems(Inventory.getAllProducts());
+
+
+    productIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+    productNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+    productInventoryCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
+    productPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+  }
 
   Stage stage;
   Parent scene;
@@ -63,10 +84,12 @@ public class MainScreenController implements Initializable {
   private TableColumn<Product, Double> productPriceCol;
 
 
+
+
   @FXML
   void onActionAddPart(ActionEvent event) throws IOException {
 
-    stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+    stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
     scene = FXMLLoader.load(getClass().getResource("/view/AddPartView.fxml"));
     stage.setScene(new Scene(scene));
     stage.show();
@@ -76,7 +99,7 @@ public class MainScreenController implements Initializable {
   @FXML
   void onActionAddProduct(ActionEvent event) throws IOException {
 
-    stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+    stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
     scene = FXMLLoader.load(getClass().getResource("/view/AddProductView.fxml"));
     stage.setScene(new Scene(scene));
     stage.show();
@@ -86,7 +109,7 @@ public class MainScreenController implements Initializable {
   @FXML
   void onActionDeletePart(ActionEvent event) {
 
-    if(partTableView.getSelectionModel().getSelectedItem() != null) {
+    if (partTableView.getSelectionModel().getSelectedItem() != null) {
 
       Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will permanently delete the part, do you want to continue?");
       alert.setTitle("CONFIRMATION");
@@ -104,7 +127,7 @@ public class MainScreenController implements Initializable {
   @FXML
   void onActionDeleteProduct(ActionEvent event) {
 
-    if(productTableView.getSelectionModel().getSelectedItem() != null) {
+    if (productTableView.getSelectionModel().getSelectedItem() != null) {
 
       Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will permanently delete the product, do you want to continue?");
       alert.setTitle("CONFIRMATION");
@@ -202,7 +225,7 @@ public class MainScreenController implements Initializable {
       ObservableList<Product> searchResult = FXCollections.observableArrayList();
       searchResult.add(Inventory.lookupProduct(productId));
 
-      if(searchResult.get(0) == null) {
+      if (searchResult.get(0) == null) {
         productTableView.setItems(Inventory.getAllProducts());
       } else {
         productTableView.setItems(searchResult);
@@ -210,29 +233,6 @@ public class MainScreenController implements Initializable {
     } catch (NumberFormatException e) {
       productTableView.setItems(Inventory.lookupProduct(productInput));
     }
-
-  }
-
-  @Override
-  public void initialize(URL url, ResourceBundle rb) {
-    // Set Parts table view
-    partTableView.setItems(Inventory.getAllParts());
-
-    // Fill Parts column with values
-    partIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-    partNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-    partInventoryCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
-    partPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
-
-    // Set Products table view
-    productTableView.setItems(Inventory.getAllProducts());
-
-    // Fill Products column with values
-
-    productIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-    productNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-    productInventoryCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
-    productPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
 
   }
 
