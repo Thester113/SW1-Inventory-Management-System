@@ -121,7 +121,7 @@ public class ModifyProductController implements Initializable {
 
     if(result.isPresent() && result.get() == ButtonType.OK) {
       stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-      scene = FXMLLoader.load(getClass().getResource("/view/MainScreenView.fxml"));
+      scene = FXMLLoader.load(getClass().getResource("/view/MainScreen.fxml"));
       stage.setScene(new Scene(scene));
       stage.show();
     }
@@ -158,7 +158,7 @@ public class ModifyProductController implements Initializable {
       }
 
       stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-      scene = FXMLLoader.load(getClass().getResource("/view/MainScreenView.fxml"));
+      scene = FXMLLoader.load(getClass().getResource("/view/MainScreen.fxml"));
       stage.setScene(new Scene(scene));
       stage.show();
     }
