@@ -90,12 +90,13 @@ public class ModifyProductController implements Initializable {
   @FXML
   private TableColumn<Part, Double> associatedPrice;
 
+  //Add part through modify product UI
   @FXML
   void onActionAddPart(ActionEvent event) {
 
     modifiedAssociatedParts.add(inventoryPartsTableView.getSelectionModel().getSelectedItem());
   }
-
+  //Delete part through modify product UI
   @FXML
   void onActionDeletePart(ActionEvent event) {
 
@@ -110,7 +111,7 @@ public class ModifyProductController implements Initializable {
       }
     }
   }
-
+  //Return to main screen through product UI
   @FXML
   void onActionReturnToMainScreen(ActionEvent event) throws IOException {
 
@@ -126,7 +127,7 @@ public class ModifyProductController implements Initializable {
       stage.show();
     }
   }
-
+  //Save through modify product UI
   @FXML
   void onActionSave(ActionEvent event) throws IOException {
 
@@ -163,7 +164,7 @@ public class ModifyProductController implements Initializable {
       stage.show();
     }
   }
-
+  //Search through modify product UI
   @FXML
   void onActionSearchPart(ActionEvent event) {
 
@@ -184,7 +185,7 @@ public class ModifyProductController implements Initializable {
     }
 
   }
-
+  //Send modifications through modify product UI to other windows
   public void sendProductInfo(Product product) {
 
     // Set product info fields

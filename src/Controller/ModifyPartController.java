@@ -60,18 +60,20 @@ public class ModifyPartController implements Initializable {
   @FXML
   private TextField partMinField;
 
+  //Modify part through part UI with InHouse
+
   @FXML
   void onActionModPartIn(ActionEvent event) {
 
     modPartVariableName.setText("Machine ID:");
   }
-
+  //Modify part through part UI with Outsourced
   @FXML
   void onActionModPartOut(ActionEvent event) {
 
     modPartVariableName.setText("Company Name:");
   }
-
+  //Return to main screen from modify UI
   @FXML
   void onActionReturnToMainScreen(ActionEvent event) throws IOException {
 
@@ -89,7 +91,7 @@ public class ModifyPartController implements Initializable {
     stage.show();
 
   }
-
+// Save part modification from UI
   @FXML
   void onActionSave(ActionEvent event) throws IOException {
 
@@ -150,7 +152,7 @@ public class ModifyPartController implements Initializable {
       stage.show();
     }
   }
-
+  //Send part through part UI to other windows
   public void sendPartInfo(Part part) {
 
     if (!(part instanceof InHouse)) {
