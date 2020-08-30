@@ -75,17 +75,18 @@ public class ModifyPartController implements Initializable {
   @FXML
   void onActionReturnToMainScreen(ActionEvent event) throws IOException {
 
-    Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Changes wont be saved, continue?");
+    Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Changes will not be saved, do you want to continue?");
     alert.setTitle("CONFIRMATION");
 
     Optional<ButtonType> result = alert.showAndWait();
 
-    if(result.isPresent() && result.get() == ButtonType.OK) {
-      stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-      scene = FXMLLoader.load(getClass().getResource("/View/MainScreen.fxml"));
-      stage.setScene(new Scene(scene));
-      stage.show();
+    if (!result.isPresent() || result.get() != ButtonType.OK) {
+      return;
     }
+    stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+    scene = FXMLLoader.load(getClass().getResource("/View/MainScreen.fxml"));
+    stage.setScene(new Scene(scene));
+    stage.show();
 
   }
 
@@ -96,7 +97,7 @@ public class ModifyPartController implements Initializable {
     if (Integer.parseInt(partStockField.getText()) >= Integer.parseInt(partMaxField.getText()) || Integer.parseInt(partStockField.getText()) <= Integer.parseInt(partMinField.getText())) {
       Alert alert = new Alert(Alert.AlertType.ERROR);
       alert.setTitle("Error");
-      alert.setContentText("Please make sure that inventory quantity is greater than minimum and less than the maximum value.");
+      alert.setContentText("Please make sure that inventory number is greater than minimum and less than the maximum value.");
       alert.showAndWait();
     } else {
 
@@ -113,7 +114,20 @@ public class ModifyPartController implements Initializable {
 
           int partIndex = Inventory.getAllParts().indexOf(part);
 
-          if (modPartInHouse.isSelected()) {
+          if (!modPartInHouse.isSelected()) {
+            if (!(part instanceof Outsourced)) {
+              Part outSrcPart = new Outsourced(id, name, price, stock, min, max, modPartVariableField.getText());
+              Inventory.updatePart(partIndex, outSrcPart);
+            } else {
+              part.setName(name);
+              part.setStock(stock);
+              part.setPrice(price);
+              part.setMax(max);
+              part.setMin(min);
+
+              ((Outsourced) part).setCompanyName(modPartVariableField.getText());
+            }
+          } else {
             if (part instanceof InHouse) {
               part.setName(name);
               part.setStock(stock);
@@ -123,21 +137,8 @@ public class ModifyPartController implements Initializable {
 
               ((InHouse) part).setMachineId(Integer.parseInt(modPartVariableField.getText()));
             } else {
-              Part inHousePart = new InHouse(id, name, price,stock,min,max, Integer.parseInt(modPartVariableField.getText()));
+              Part inHousePart = new InHouse(id, name, price, stock, min, max, Integer.parseInt(modPartVariableField.getText()));
               Inventory.updatePart(partIndex, inHousePart);
-            }
-          } else {
-            if(part instanceof Outsourced) {
-              part.setName(name);
-              part.setStock(stock);
-              part.setPrice(price);
-              part.setMax(max);
-              part.setMin(min);
-
-              ((Outsourced) part).setCompanyName(modPartVariableField.getText());
-            } else {
-              Part outSrcPart = new Outsourced(id, name, price, stock, min, max, modPartVariableField.getText());
-              Inventory.updatePart(partIndex, outSrcPart);
             }
           }
           break;

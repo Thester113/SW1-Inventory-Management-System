@@ -111,7 +111,7 @@ public class MainScreenController implements Initializable {
 
     if (partTableView.getSelectionModel().getSelectedItem() != null) {
 
-      Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will permanently delete the part, do you want to continue?");
+      Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will delete the part permanently, do you want to continue?");
       alert.setTitle("CONFIRMATION");
 
       Optional<ButtonType> result = alert.showAndWait();
@@ -129,14 +129,13 @@ public class MainScreenController implements Initializable {
 
     if (productTableView.getSelectionModel().getSelectedItem() != null) {
 
-      Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will permanently delete the product, do you want to continue?");
+      Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will delete the product permanently, do you want to continue?");
       alert.setTitle("CONFIRMATION");
 
       Optional<ButtonType> result = alert.showAndWait();
 
-      if (result.isPresent() && result.get() == ButtonType.OK) {
-        Inventory.deleteProduct(productTableView.getSelectionModel().getSelectedItem());
-      }
+      if (!result.isPresent() || result.get() != ButtonType.OK) return;
+      Inventory.deleteProduct(productTableView.getSelectionModel().getSelectedItem());
     } else {
       System.out.println("No product selected.");
     }
@@ -205,11 +204,7 @@ public class MainScreenController implements Initializable {
       ObservableList<Part> searchResult = FXCollections.observableArrayList();
       searchResult.add(Inventory.lookupPart(partId));
 
-      if (searchResult.get(0) == null) {
-        partTableView.setItems(Inventory.getAllParts());
-      } else {
-        partTableView.setItems(searchResult);
-      }
+      partTableView.setItems(searchResult.get(0) == null ? Inventory.getAllParts() : searchResult);
     } catch (NumberFormatException e) {
       partTableView.setItems(Inventory.lookupPart(partInput));
     }
@@ -225,11 +220,7 @@ public class MainScreenController implements Initializable {
       ObservableList<Product> searchResult = FXCollections.observableArrayList();
       searchResult.add(Inventory.lookupProduct(productId));
 
-      if (searchResult.get(0) == null) {
-        productTableView.setItems(Inventory.getAllProducts());
-      } else {
-        productTableView.setItems(searchResult);
-      }
+      productTableView.setItems(searchResult.get(0) == null ? Inventory.getAllProducts() : searchResult);
     } catch (NumberFormatException e) {
       productTableView.setItems(Inventory.lookupProduct(productInput));
     }
