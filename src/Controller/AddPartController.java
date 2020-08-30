@@ -58,19 +58,19 @@ public class AddPartController implements Initializable {
   @FXML
   private TextField addPartVariableField;
 
-  //Adds part through part UI with InHouse
+  /**Adds part through part UI with InHouse**/
   @FXML
   public void onActionAddPartIn(ActionEvent event) {
 
     addPartVariableLabel.setText("Machine ID:");
   }
-  //Adds part through part UI with Outsourced
+  /**Adds part through part UI with Outsourced**/
   @FXML
   void onActionAddPartOut(ActionEvent event) {
 
     addPartVariableLabel.setText("Company Name:");
   }
-  //Return to main screen UI
+  /**Return to main screen UI**/
   @FXML
   void onActionReturnToMainScreen(ActionEvent event) throws IOException {
 
@@ -87,7 +87,7 @@ public class AddPartController implements Initializable {
     stage.setScene(new Scene(scene));
     stage.show();
   }
-  //Saves part through part UI
+  /**Saves part through part UI**/
   @FXML
   void onActionSave(ActionEvent event) throws IOException {
 

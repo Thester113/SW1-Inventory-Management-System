@@ -21,6 +21,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class ModifyProductController implements Initializable {
+  /** Populates tables and columns with values*/
   @Override
   public void initialize(URL url, ResourceBundle rb) {
 
@@ -90,13 +91,13 @@ public class ModifyProductController implements Initializable {
   @FXML
   private TableColumn<Part, Double> associatedPrice;
 
-  //Add part through modify product UI
+  /** Add part through modify product UI */
   @FXML
   void onActionAddPart(ActionEvent event) {
 
     modifiedAssociatedParts.add(inventoryPartsTableView.getSelectionModel().getSelectedItem());
   }
-  //Delete part through modify product UI
+  /** Delete part through modify product UI */
   @FXML
   void onActionDeletePart(ActionEvent event) {
 
@@ -111,7 +112,7 @@ public class ModifyProductController implements Initializable {
       }
     }
   }
-  //Return to main screen through product UI
+  /** Return to main screen through product UI */
   @FXML
   void onActionReturnToMainScreen(ActionEvent event) throws IOException {
 
@@ -120,14 +121,15 @@ public class ModifyProductController implements Initializable {
 
     Optional<ButtonType> result = alert.showAndWait();
 
-    if(result.isPresent() && result.get() == ButtonType.OK) {
-      stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-      scene = FXMLLoader.load(getClass().getResource("/view/MainScreen.fxml"));
-      stage.setScene(new Scene(scene));
-      stage.show();
+    if (!result.isPresent() || result.get() != ButtonType.OK) {
+      return;
     }
+    stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+    scene = FXMLLoader.load(getClass().getResource("/view/MainScreen.fxml"));
+    stage.setScene(new Scene(scene));
+    stage.show();
   }
-  //Save through modify product UI
+  /** Save through modify product UI */
   @FXML
   void onActionSave(ActionEvent event) throws IOException {
 
@@ -145,18 +147,11 @@ public class ModifyProductController implements Initializable {
       int min = Integer.parseInt(productMinField.getText());
       int max = Integer.parseInt(productMaxField.getText());
 
-      for (Product product : Inventory.getAllProducts()) {
-
-        if (product.getId() != id) continue;
-
-        int productIndex = Inventory.getAllProducts().indexOf(product);
-
+      Inventory.getAllProducts().stream().filter(product -> product.getId() == id).mapToInt(product -> Inventory.getAllProducts().indexOf(product)).forEach(productIndex -> {
         Product modifiedProduct = new Product(id, name, price, stock, min, max);
-
         modifiedProduct.getAllAssociatedParts().setAll(modifiedAssociatedParts);
-
         Inventory.updateProduct(productIndex, modifiedProduct);
-      }
+      });
 
       stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
       scene = FXMLLoader.load(getClass().getResource("/view/MainScreen.fxml"));
@@ -164,7 +159,7 @@ public class ModifyProductController implements Initializable {
       stage.show();
     }
   }
-  //Search through modify product UI
+  /** Search through modify product UI */
   @FXML
   void onActionSearchPart(ActionEvent event) {
 
@@ -185,10 +180,10 @@ public class ModifyProductController implements Initializable {
     }
 
   }
-  //Send modifications through modify product UI to other windows
+  /** Send modifications through modify product UI to other windows */
   public void sendProductInfo(Product product) {
 
-    // Set product info fields
+    // Set the product info fields
     productIdField.setText(Integer.toString(product.getId()));
     productNameField.setText(product.getName());
     productStockField.setText(Integer.toString(product.getStock()));
@@ -196,11 +191,11 @@ public class ModifyProductController implements Initializable {
     productMaxField.setText(Integer.toString(product.getMax()));
     productMinField.setText(Integer.toString(product.getMin()));
 
-    // Set associated parts table view
+    // Set the associated parts table view
     modifiedAssociatedParts.setAll(product.getAllAssociatedParts());
     associatedPartsTableView.setItems(modifiedAssociatedParts);
 
-    // Fill associated parts column with values
+    // Fill the associated parts column
 
     associatedPartId.setCellValueFactory(new PropertyValueFactory<>("id"));
     associatedPartName.setCellValueFactory(new PropertyValueFactory<>("name"));

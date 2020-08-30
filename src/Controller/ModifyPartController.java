@@ -60,20 +60,20 @@ public class ModifyPartController implements Initializable {
   @FXML
   private TextField partMinField;
 
-  //Modify part through part UI with InHouse
+  /** Modify part through part UI with InHouse */
 
   @FXML
   void onActionModPartIn(ActionEvent event) {
 
     modPartVariableName.setText("Machine ID:");
   }
-  //Modify part through part UI with Outsourced
+  /** Modify part through part UI with Outsourced */
   @FXML
   void onActionModPartOut(ActionEvent event) {
 
     modPartVariableName.setText("Company Name:");
   }
-  //Return to main screen from modify UI
+  /** Return to main screen from modify UI */
   @FXML
   void onActionReturnToMainScreen(ActionEvent event) throws IOException {
 
@@ -91,7 +91,7 @@ public class ModifyPartController implements Initializable {
     stage.show();
 
   }
-// Save part modification from UI
+/** Save part modification from UI */
   @FXML
   void onActionSave(ActionEvent event) throws IOException {
 
@@ -112,39 +112,40 @@ public class ModifyPartController implements Initializable {
 
       for(Part part: Inventory.getAllParts()) {
 
-        if (part.getId() == id) {
-
-          int partIndex = Inventory.getAllParts().indexOf(part);
-
-          if (!modPartInHouse.isSelected()) {
-            if (!(part instanceof Outsourced)) {
-              Part outSrcPart = new Outsourced(id, name, price, stock, min, max, modPartVariableField.getText());
-              Inventory.updatePart(partIndex, outSrcPart);
-            } else {
-              part.setName(name);
-              part.setStock(stock);
-              part.setPrice(price);
-              part.setMax(max);
-              part.setMin(min);
-
-              ((Outsourced) part).setCompanyName(modPartVariableField.getText());
-            }
-          } else {
-            if (part instanceof InHouse) {
-              part.setName(name);
-              part.setStock(stock);
-              part.setPrice(price);
-              part.setMax(max);
-              part.setMin(min);
-
-              ((InHouse) part).setMachineId(Integer.parseInt(modPartVariableField.getText()));
-            } else {
-              Part inHousePart = new InHouse(id, name, price, stock, min, max, Integer.parseInt(modPartVariableField.getText()));
-              Inventory.updatePart(partIndex, inHousePart);
-            }
-          }
-          break;
+        if (part.getId() != id) {
+          continue;
         }
+
+        int partIndex = Inventory.getAllParts().indexOf(part);
+
+        if (!modPartInHouse.isSelected()) {
+          if (!(part instanceof Outsourced)) {
+            Part outSrcPart = new Outsourced(id, name, price, stock, min, max, modPartVariableField.getText());
+            Inventory.updatePart(partIndex, outSrcPart);
+          } else {
+            part.setName(name);
+            part.setStock(stock);
+            part.setPrice(price);
+            part.setMax(max);
+            part.setMin(min);
+
+            ((Outsourced) part).setCompanyName(modPartVariableField.getText());
+          }
+        } else {
+          if (part instanceof InHouse) {
+            part.setName(name);
+            part.setStock(stock);
+            part.setPrice(price);
+            part.setMax(max);
+            part.setMin(min);
+
+            ((InHouse) part).setMachineId(Integer.parseInt(modPartVariableField.getText()));
+          } else {
+            Part inHousePart = new InHouse(id, name, price, stock, min, max, Integer.parseInt(modPartVariableField.getText()));
+            Inventory.updatePart(partIndex, inHousePart);
+          }
+        }
+        break;
       }
       stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
       scene = FXMLLoader.load(getClass().getResource("/View/MainScreen.fxml"));
@@ -152,7 +153,7 @@ public class ModifyPartController implements Initializable {
       stage.show();
     }
   }
-  //Send part through part UI to other windows
+  /** Send part through part UI to other windows */
   public void sendPartInfo(Part part) {
 
     if (!(part instanceof InHouse)) {
