@@ -24,19 +24,18 @@ import java.util.ResourceBundle;
 public class MainScreenController implements Initializable {
   @Override
   public void initialize(URL url, ResourceBundle rb) {
-
+    //Creates table view with parts
     partTableView.setItems(Inventory.getAllParts());
+    //Creates table view with products and values
+    productTableView.setItems(Inventory.getAllProducts());
 
-
+    // Adds Parts to columns with values
     partIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
     partNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
     partInventoryCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
     partPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
 
-
-    productTableView.setItems(Inventory.getAllProducts());
-
-
+    //Adds Products to columns with values
     productIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
     productNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
     productInventoryCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
@@ -83,9 +82,7 @@ public class MainScreenController implements Initializable {
   @FXML
   private TableColumn<Product, Double> productPriceCol;
 
-
-
-
+//Adds part through UI
   @FXML
   void onActionAddPart(ActionEvent event) throws IOException {
 
@@ -95,7 +92,7 @@ public class MainScreenController implements Initializable {
     stage.show();
 
   }
-
+  //Adds product through UI
   @FXML
   void onActionAddProduct(ActionEvent event) throws IOException {
 
@@ -105,7 +102,7 @@ public class MainScreenController implements Initializable {
     stage.show();
 
   }
-
+  //Deletes part through UI
   @FXML
   void onActionDeletePart(ActionEvent event) {
 
@@ -123,7 +120,7 @@ public class MainScreenController implements Initializable {
       System.out.println("No part selected");
     }
   }
-
+  //Deletes product through UI
   @FXML
   void onActionDeleteProduct(ActionEvent event) {
 
@@ -140,14 +137,14 @@ public class MainScreenController implements Initializable {
       System.out.println("No product selected.");
     }
   }
-
+  //Exit the program
   @FXML
   void onActionExit(ActionEvent event) {
 
     System.exit(0);
 
   }
-
+  //Modify part through UI
   @FXML
   void onActionModifyPart(ActionEvent event) throws IOException {
 
@@ -170,7 +167,7 @@ public class MainScreenController implements Initializable {
     }
 
   }
-
+  //Modify product through UI
   @FXML
   void onActionModifyProduct(ActionEvent event) throws IOException {
 
@@ -193,7 +190,7 @@ public class MainScreenController implements Initializable {
     }
 
   }
-
+  //Search part through UI
   @FXML
   void onActionPartsSearch(ActionEvent event) {
 
@@ -209,7 +206,7 @@ public class MainScreenController implements Initializable {
       partTableView.setItems(Inventory.lookupPart(partInput));
     }
   }
-
+  //Search product through UI
   @FXML
   void onActionProductsSearch(ActionEvent event) {
 

@@ -24,20 +24,21 @@ import java.util.ResourceBundle;
 public class AddProductController implements Initializable {
   @Override
   public void initialize(URL url, ResourceBundle rb) {
-    // Set Parts table view
+
+    // Sets the Parts table view
     inventoryPartsTableView.setItems(Inventory.getAllParts());
 
-    // Fill Parts column with values
+    // Sets the associated parts table view
+    associatedPartsTableView.setItems(tempAssociatedPartsList);
+
+
+    // Fills the Parts column with values
     inventoryPartID.setCellValueFactory(new PropertyValueFactory<>("id"));
     inventoryPartName.setCellValueFactory(new PropertyValueFactory<>("name"));
     inventoryStockLevel.setCellValueFactory(new PropertyValueFactory<>("stock"));
     inventoryPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
 
-
-    // Set associated parts table view
-    associatedPartsTableView.setItems(tempAssociatedPartsList);
-
-    // Fill associated parts column with values
+    // Fills the associated parts column with values
 
     associatedPartId.setCellValueFactory(new PropertyValueFactory<>("id"));
     associatedPartName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -102,12 +103,12 @@ public class AddProductController implements Initializable {
   @FXML
   private TableColumn<Part, Double> associatedPrice;
 
-
+  //Adds part through product UI
   @FXML
   void onActionAddPart(ActionEvent event) {
     tempAssociatedPartsList.add(inventoryPartsTableView.getSelectionModel().getSelectedItem());
   }
-
+  //Deletes part through product UI
   @FXML
   void onActionDeletePart(ActionEvent event) {
 
@@ -123,7 +124,7 @@ public class AddProductController implements Initializable {
       tempAssociatedPartsList.remove(associatedPartsTableView.getSelectionModel().getSelectedItem());
     }
   }
-
+  //return to Main Screen through product UI
   @FXML
   void onActionReturnToMainScreen(ActionEvent event) throws IOException {
 
@@ -141,7 +142,7 @@ public class AddProductController implements Initializable {
     stage.show();
 
   }
-
+  //Saves through product UI
   @FXML
   void onActionSave(ActionEvent event) throws IOException {
 
@@ -169,7 +170,7 @@ public class AddProductController implements Initializable {
     }
 
   }
-
+  //Search part through product UI
   @FXML
   void onActionSearchProductPart(ActionEvent event) {
 
