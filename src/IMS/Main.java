@@ -23,11 +23,15 @@ public class Main extends Application {
     Part part2 = new Outsourced(2,"Part2", 3.44, 7,1,21,"Tom's Farm");
     Part part3 = new InHouse(3, "Part3", 6.99, 13,11,20, 1234);
     Part part4 = new Outsourced(4,"Part14", 21.95, 25,15,30,"Happy days");
+    Part part5 = new InHouse(3, "Part9", 3.99, 13,11,20, 1234);
+    Part part6 = new Outsourced(4,"Part7", 1.95, 25,15,30,"Ash cash");
 
     Inventory.addPart(part1);
     Inventory.addPart(part2);
     Inventory.addPart(part3);
     Inventory.addPart(part4);
+    Inventory.addPart(part5);
+    Inventory.addPart(part6);
 
     Product product1 = new Product(1,"Product1",29.99,5,1,5);
     Product product2 = new Product(2,"Product2",19.99,11,9,17);

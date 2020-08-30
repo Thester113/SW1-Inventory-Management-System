@@ -20,10 +20,32 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static java.lang.Double.*;
-
 
 public class AddProductController implements Initializable {
+  @Override
+  public void initialize(URL url, ResourceBundle rb) {
+    // Set Parts table view
+    inventoryPartsTableView.setItems(Inventory.getAllParts());
+
+    // Fill Parts column with values
+    inventoryPartID.setCellValueFactory(new PropertyValueFactory<>("id"));
+    inventoryPartName.setCellValueFactory(new PropertyValueFactory<>("name"));
+    inventoryStockLevel.setCellValueFactory(new PropertyValueFactory<>("stock"));
+    inventoryPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+
+    // Set associated parts table view
+    associatedPartsTableView.setItems(tempAssociatedPartsList);
+
+    // Fill associated parts column with values
+
+    associatedPartId.setCellValueFactory(new PropertyValueFactory<>("id"));
+    associatedPartName.setCellValueFactory(new PropertyValueFactory<>("name"));
+    associatedStockLevel.setCellValueFactory(new PropertyValueFactory<>("stock"));
+    associatedPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+
+  }
 
   Stage stage;
   Parent scene;
@@ -80,30 +102,6 @@ public class AddProductController implements Initializable {
   @FXML
   private TableColumn<Part, Double> associatedPrice;
 
-  @Override
-  public void initialize(URL url, ResourceBundle rb) {
-    // Set Parts table view
-    inventoryPartsTableView.setItems(Inventory.getAllParts());
-
-    // Fill Parts column with values
-    inventoryPartID.setCellValueFactory(new PropertyValueFactory<>("id"));
-    inventoryPartName.setCellValueFactory(new PropertyValueFactory<>("name"));
-    inventoryStockLevel.setCellValueFactory(new PropertyValueFactory<>("stock"));
-    inventoryPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
-
-
-    // Set associated parts table view
-    associatedPartsTableView.setItems(tempAssociatedPartsList);
-
-    // Fill associated parts column with values
-
-    associatedPartId.setCellValueFactory(new PropertyValueFactory<>("id"));
-    associatedPartName.setCellValueFactory(new PropertyValueFactory<>("name"));
-    associatedStockLevel.setCellValueFactory(new PropertyValueFactory<>("stock"));
-    associatedPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
-
-
-  }
 
   @FXML
   void onActionAddPart(ActionEvent event) {
@@ -192,6 +190,5 @@ public class AddProductController implements Initializable {
     }
 
   }
-
 
 }

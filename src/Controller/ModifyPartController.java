@@ -19,6 +19,10 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class ModifyPartController implements Initializable {
+  @Override
+  public void initialize(URL url, ResourceBundle rb) {
+
+  }
 
   Stage stage;
   Parent scene;
@@ -167,8 +171,4 @@ public class ModifyPartController implements Initializable {
 
   }
 
-  @Override
-  public void initialize(URL url, ResourceBundle rb) {
-
-  }
 }

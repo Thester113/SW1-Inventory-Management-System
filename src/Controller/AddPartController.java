@@ -18,6 +18,10 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class AddPartController implements Initializable {
+  @Override
+  public void initialize(URL url, ResourceBundle rb) {
+
+  }
 
   Stage stage;
   Parent scene;
@@ -114,10 +118,5 @@ public class AddPartController implements Initializable {
       alert.setContentText("Please make sure that inventory quantity is greater than minimum and less than the maximum value.");
       alert.showAndWait();
     }
-  }
-
-  @Override
-  public void initialize(URL url, ResourceBundle rb) {
-
   }
 }
