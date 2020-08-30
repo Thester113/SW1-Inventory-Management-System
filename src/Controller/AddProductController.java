@@ -22,6 +22,7 @@ import java.util.ResourceBundle;
 
 
 public class AddProductController implements Initializable {
+/** Populates tables and columns with values*/
   @Override
   public void initialize(URL url, ResourceBundle rb) {
 
@@ -103,12 +104,12 @@ public class AddProductController implements Initializable {
   @FXML
   private TableColumn<Part, Double> associatedPrice;
 
-  //Adds part through product UI
+  /**Adds part through product UI*/
   @FXML
   void onActionAddPart(ActionEvent event) {
     tempAssociatedPartsList.add(inventoryPartsTableView.getSelectionModel().getSelectedItem());
   }
-  //Deletes part through product UI
+  /**Deletes part through product UI*/
   @FXML
   void onActionDeletePart(ActionEvent event) {
 
@@ -124,7 +125,7 @@ public class AddProductController implements Initializable {
       tempAssociatedPartsList.remove(associatedPartsTableView.getSelectionModel().getSelectedItem());
     }
   }
-  //return to Main Screen through product UI
+  /**return to Main Screen through product UI*/
   @FXML
   void onActionReturnToMainScreen(ActionEvent event) throws IOException {
 
@@ -142,7 +143,7 @@ public class AddProductController implements Initializable {
     stage.show();
 
   }
-  //Saves through product UI
+  /** Saves through product UI */
   @FXML
   void onActionSave(ActionEvent event) throws IOException {
 
@@ -170,7 +171,7 @@ public class AddProductController implements Initializable {
     }
 
   }
-  //Search part through product UI
+  /** Search part through product UI */
   @FXML
   void onActionSearchProductPart(ActionEvent event) {
 
