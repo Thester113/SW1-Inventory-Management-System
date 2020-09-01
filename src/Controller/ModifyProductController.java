@@ -109,6 +109,8 @@ public class ModifyProductController implements Initializable {
 
       if (result.isPresent() && result.get() == ButtonType.OK) {
         modifiedAssociatedParts.removeAll(associatedPartsTableView.getSelectionModel().getSelectedItem());
+        alert = new Alert(Alert.AlertType.CONFIRMATION, "Test");
+        alert.setTitle("CONFIRMATION");
       }
     }
   }
