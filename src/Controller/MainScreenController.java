@@ -20,9 +20,40 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import static Model.Inventory.canDeleteProduct;
+
 
 public class MainScreenController implements Initializable {
-  /** Populates tables and columns with values*/
+  Stage stage;
+  Parent scene;
+  @FXML
+  private TextField partSearchField;
+  @FXML
+  private TableView<Part> partTableView;
+  @FXML
+  private TableColumn<Part, Integer> partIdCol;
+  @FXML
+  private TableColumn<Part, String> partNameCol;
+  @FXML
+  private TableColumn<Part, Integer> partInventoryCol;
+  @FXML
+  private TableColumn<Part, Double> partPriceCol;
+  @FXML
+  private TextField productSearchField;
+  @FXML
+  private TableView<Product> productTableView;
+  @FXML
+  private TableColumn<Product, Integer> productIdCol;
+  @FXML
+  private TableColumn<Product, String> productNameCol;
+  @FXML
+  private TableColumn<Product, Integer> productInventoryCol;
+  @FXML
+  private TableColumn<Product, Double> productPriceCol;
+
+  /**
+   * Populates tables and columns with values
+   */
   @Override
   public void initialize(URL url, ResourceBundle rb) {
     /* Creates table view with parts */
@@ -44,46 +75,9 @@ public class MainScreenController implements Initializable {
 
   }
 
-  Stage stage;
-  Parent scene;
-
-  @FXML
-  private TextField partSearchField;
-
-  @FXML
-  private TableView<Part> partTableView;
-
-  @FXML
-  private TableColumn<Part, Integer> partIdCol;
-
-  @FXML
-  private TableColumn<Part, String> partNameCol;
-
-  @FXML
-  private TableColumn<Part, Integer> partInventoryCol;
-
-  @FXML
-  private TableColumn<Part, Double> partPriceCol;
-
-  @FXML
-  private TextField productSearchField;
-
-  @FXML
-  private TableView<Product> productTableView;
-
-  @FXML
-  private TableColumn<Product, Integer> productIdCol;
-
-  @FXML
-  private TableColumn<Product, String> productNameCol;
-
-  @FXML
-  private TableColumn<Product, Integer> productInventoryCol;
-
-  @FXML
-  private TableColumn<Product, Double> productPriceCol;
-
-/** Adds part through UI */
+  /**
+   * Adds part through UI
+   */
   @FXML
   void onActionAddPart(ActionEvent event) throws IOException {
 
@@ -93,7 +87,10 @@ public class MainScreenController implements Initializable {
     stage.show();
 
   }
-  /** Adds product through UI */
+
+  /**
+   * Adds product through UI
+   */
   @FXML
   void onActionAddProduct(ActionEvent event) throws IOException {
 
@@ -103,7 +100,10 @@ public class MainScreenController implements Initializable {
     stage.show();
 
   }
-  /** Deletes part through UI */
+
+  /**
+   * Deletes part through UI
+   */
   @FXML
   void onActionDeletePart(ActionEvent event) {
 
@@ -118,34 +118,62 @@ public class MainScreenController implements Initializable {
         Inventory.deletePart(partTableView.getSelectionModel().getSelectedItem());
       }
     } else {
+      Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "No part selected");
+      alert.setTitle("CONFIRMATION");
       System.out.println("No part selected");
     }
   }
-  /** Deletes product through UI */
+
+  /**
+   * Deletes product through UI
+   */
   @FXML
   void onActionDeleteProduct(ActionEvent event) {
+    Product product = productTableView.getSelectionModel().getSelectedItem();
+    try {
+      if(!canDeleteProduct(product)){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("ERROR!");
+        alert.setHeaderText("This product cannot be removed");
+        alert.setContentText("This product has parts associated with it. Please disassociate those parts and then try again.");
+        alert.showAndWait();
+      }
 
-    if (productTableView.getSelectionModel().getSelectedItem() != null) {
+      else {
+        if (productTableView.getSelectionModel().getSelectedItem() == null)
+          System.out.println("No product selected.");
 
-      Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will delete the product permanently, do you want to continue?");
-      alert.setTitle("CONFIRMATION");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will delete the product permanently, do you want to continue?");
+        alert.setTitle("CONFIRMATION");
 
-      Optional<ButtonType> result = alert.showAndWait();
+        Optional<ButtonType> result = alert.showAndWait();
 
-      if (!result.isPresent() || result.get() != ButtonType.OK) return;
-      Inventory.deleteProduct(productTableView.getSelectionModel().getSelectedItem());
-    } else {
-      System.out.println("No product selected.");
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+          Inventory.deleteProduct(productTableView.getSelectionModel().getSelectedItem());
+        }
+      }
+    } catch (NullPointerException e) {
+      Alert alert = new Alert(Alert.AlertType.ERROR);
+      alert.setTitle("Error");
+      alert.setContentText("user should not delete a product that has a part associated with it .");
+      alert.showAndWait();
+
     }
   }
-  /** Exit the program */
+
+  /**
+   * Exit the program
+   */
   @FXML
   void onActionExit(ActionEvent event) {
 
     System.exit(0);
 
   }
-  /** Modify part through UI */
+
+  /**
+   * Modify part through UI
+   */
   @FXML
   void onActionModifyPart(ActionEvent event) throws IOException {
 
@@ -168,7 +196,10 @@ public class MainScreenController implements Initializable {
     }
 
   }
-  /** Modify product through UI */
+
+  /**
+   * Modify product through UI
+   */
   @FXML
   void onActionModifyProduct(ActionEvent event) throws IOException {
 
@@ -191,7 +222,10 @@ public class MainScreenController implements Initializable {
     }
 
   }
-  /** Search part through UI */
+
+  /**
+   * Search part through UI
+   */
   @FXML
   void onActionPartsSearch(ActionEvent event) {
 
@@ -202,12 +236,22 @@ public class MainScreenController implements Initializable {
       ObservableList<Part> searchResult = FXCollections.observableArrayList();
       searchResult.add(Inventory.lookupPart(partId));
 
-      partTableView.setItems(searchResult.get(0) == null ? Inventory.getAllParts() : searchResult);
+      if (searchResult.get(0) == null) partTableView.setItems(Inventory.getAllParts());
+      else partTableView.setItems(searchResult);
+
     } catch (NumberFormatException e) {
+      Alert alert = new Alert(Alert.AlertType.ERROR);
+      alert.setTitle("Error");
+      alert.setContentText("Please enter valid part to search.");
+      alert.showAndWait();
       partTableView.setItems(Inventory.lookupPart(partInput));
+
     }
   }
-  /** Search product through UI */
+
+  /**
+   * Search product through UI
+   */
   @FXML
   void onActionProductsSearch(ActionEvent event) {
 
@@ -219,11 +263,17 @@ public class MainScreenController implements Initializable {
       searchResult.add(Inventory.lookupProduct(productId));
 
       productTableView.setItems(searchResult.get(0) == null ? Inventory.getAllProducts() : searchResult);
+
     } catch (NumberFormatException e) {
+      Alert alert = new Alert(Alert.AlertType.ERROR);
+      alert.setTitle("Error");
+      alert.setContentText("Please enter valid product to search.");
+      alert.showAndWait();
       productTableView.setItems(Inventory.lookupProduct(productInput));
     }
 
   }
 
 }
+
 

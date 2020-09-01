@@ -173,6 +173,10 @@ public class ModifyProductController implements Initializable {
       if (searchResult.get(0) != null) {
         inventoryPartsTableView.setItems(searchResult);
       } else {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("ERROR");
+        alert.setContentText("Part number does not exist");
+        alert.showAndWait();
         inventoryPartsTableView.setItems(Inventory.getAllParts());
       }
     } catch (NumberFormatException e) {

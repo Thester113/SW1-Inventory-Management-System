@@ -58,19 +58,27 @@ public class AddPartController implements Initializable {
   @FXML
   private TextField addPartVariableField;
 
-  /**Adds part through part UI with InHouse**/
+  /**
+   * Adds part through part UI with InHouse
+   **/
   @FXML
   public void onActionAddPartIn(ActionEvent event) {
 
     addPartVariableLabel.setText("Machine ID:");
   }
-  /**Adds part through part UI with Outsourced**/
+
+  /**
+   * Adds part through part UI with Outsourced
+   **/
   @FXML
   void onActionAddPartOut(ActionEvent event) {
 
     addPartVariableLabel.setText("Company Name:");
   }
-  /**Return to main screen UI**/
+
+  /**
+   * Return to main screen UI
+   **/
   @FXML
   void onActionReturnToMainScreen(ActionEvent event) throws IOException {
 
@@ -87,23 +95,19 @@ public class AddPartController implements Initializable {
     stage.setScene(new Scene(scene));
     stage.show();
   }
-  /**Saves part through part UI**/
+
+  /**
+   * Saves part through part UI
+   **/
   @FXML
   void onActionSave(ActionEvent event) throws IOException {
-
-    int id = Inventory.getAllParts().size() + 1;
-    String name = addPartName.getText();
-    double price = Double.parseDouble(addPartPrice.getText());
-    int stock = Integer.parseInt(addPartInventory.getText());
-    int min = Integer.parseInt(addPartMin.getText());
-    int max = Integer.parseInt(addPartMax.getText());
-
-    if (stock >= max || stock <= min) {
-      Alert alert = new Alert(Alert.AlertType.ERROR);
-      alert.setTitle("Error");
-      alert.setContentText("Please make sure that inventory number is greater than minimum and less than the maximum value.");
-      alert.showAndWait();
-    } else {
+    try {
+      int id = Inventory.getAllParts().size() + 1;
+      String name = addPartName.getText();
+      double price = Double.parseDouble(addPartPrice.getText());
+      int stock = Integer.parseInt(addPartInventory.getText());
+      int min = Integer.parseInt(addPartMin.getText());
+      int max = Integer.parseInt(addPartMax.getText());
 
       if (!addPartInHouse.isSelected()) {
 
@@ -114,11 +118,24 @@ public class AddPartController implements Initializable {
         int machineId = Integer.parseInt(addPartVariableField.getText());
         Inventory.addPart(new InHouse(id, name, price, stock, min, max, machineId));
       }
+      if (stock >= max || stock <= min) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setContentText("Please make sure that inventory number is greater than minimum and less than the maximum value.");
+        alert.showAndWait();
 
-      stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-      scene = FXMLLoader.load(getClass().getResource("/view/MainScreen.fxml"));
-      stage.setScene(new Scene(scene));
-      stage.show();
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(getClass().getResource("/view/MainScreen.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
+
+      }
+    } catch (NumberFormatException e) {
+      Alert alert = new Alert(Alert.AlertType.ERROR);
+      alert.setTitle("Error");
+      alert.setContentText("Please enter valid input to save.");
+      alert.showAndWait();
+
     }
   }
 }
