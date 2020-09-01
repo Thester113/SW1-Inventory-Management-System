@@ -21,6 +21,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static Model.Inventory.canDeleteProduct;
+import static java.lang.Integer.*;
 
 
 public class MainScreenController implements Initializable {
@@ -234,7 +235,7 @@ public class MainScreenController implements Initializable {
     String partInput = partSearchField.getText();
 
     try {
-      int partId = Integer.parseInt(partInput);
+      int partId = valueOf(partInput);
       ObservableList<Part> searchResult = FXCollections.observableArrayList();
       searchResult.add(Inventory.lookupPart(partId));
 
@@ -250,6 +251,11 @@ public class MainScreenController implements Initializable {
 
       }
       if (partSearchField.getText().equals("")) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("ERROR");
+        alert.setContentText("Part does not exist");
+        alert.showAndWait();
+
         partTableView.setItems(Inventory.getAllParts());
       }
 
@@ -257,7 +263,6 @@ public class MainScreenController implements Initializable {
       Alert alert = new Alert(Alert.AlertType.ERROR);
       alert.setTitle("Error");
       alert.setContentText("Please enter valid part to search.");
-      alert.showAndWait();
       partTableView.setItems(Inventory.lookupPart(partInput));
 
     }
@@ -272,7 +277,7 @@ public class MainScreenController implements Initializable {
     String productInput = productSearchField.getText();
 
     try {
-      int productId = Integer.parseInt(productInput);
+      int productId = valueOf(productInput);
       ObservableList<Product> searchResult = FXCollections.observableArrayList();
       searchResult.add(Inventory.lookupProduct(productId));
 
@@ -290,7 +295,6 @@ public class MainScreenController implements Initializable {
       Alert alert = new Alert(Alert.AlertType.ERROR);
       alert.setTitle("Error");
       alert.setContentText("Please enter valid product to search.");
-      alert.showAndWait();
       productTableView.setItems(Inventory.lookupProduct(productInput));
     }
 

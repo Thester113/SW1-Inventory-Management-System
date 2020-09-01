@@ -20,8 +20,51 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import static java.lang.Integer.parseInt;
+import static java.lang.Integer.valueOf;
+
 public class ModifyProductController implements Initializable {
-  /** Populates tables and columns with values*/
+  Stage stage;
+  Parent scene;
+  ObservableList<Part> modifiedAssociatedParts = FXCollections.observableArrayList();
+  @FXML
+  private TextField productIdField;
+  @FXML
+  private TextField productNameField;
+  @FXML
+  private TextField productStockField;
+  @FXML
+  private TextField productPriceField;
+  @FXML
+  private TextField productMaxField;
+  @FXML
+  private TextField productMinField;
+  @FXML
+  private TextField partSearchField;
+  @FXML
+  private TableView<Part> inventoryPartsTableView;
+  @FXML
+  private TableColumn<Part, Integer> inventoryPartId;
+  @FXML
+  private TableColumn<Part, String> inventoryPartName;
+  @FXML
+  private TableColumn<Part, Integer> inventoryStockLevel;
+  @FXML
+  private TableColumn<Part, Double> inventoryPrice;
+  @FXML
+  private TableView<Part> associatedPartsTableView;
+  @FXML
+  private TableColumn<Part, Integer> associatedPartId;
+  @FXML
+  private TableColumn<Part, String> associatedPartName;
+  @FXML
+  private TableColumn<Part, Integer> associatedStockLevel;
+  @FXML
+  private TableColumn<Part, Double> associatedPrice;
+
+  /**
+   * Populates tables and columns with values
+   */
   @Override
   public void initialize(URL url, ResourceBundle rb) {
 
@@ -36,85 +79,35 @@ public class ModifyProductController implements Initializable {
 
   }
 
-  Stage stage;
-  Parent scene;
-  ObservableList<Part> modifiedAssociatedParts = FXCollections.observableArrayList();
-
-  @FXML
-  private TextField productIdField;
-
-  @FXML
-  private TextField productNameField;
-
-  @FXML
-  private TextField productStockField;
-
-  @FXML
-  private TextField productPriceField;
-
-  @FXML
-  private TextField productMaxField;
-
-  @FXML
-  private TextField productMinField;
-
-  @FXML
-  private TextField partSearchField;
-
-  @FXML
-  private TableView<Part> inventoryPartsTableView;
-
-  @FXML
-  private TableColumn<Part, Integer> inventoryPartId;
-
-  @FXML
-  private TableColumn<Part, String> inventoryPartName;
-
-  @FXML
-  private TableColumn<Part, Integer> inventoryStockLevel;
-
-  @FXML
-  private TableColumn<Part, Double> inventoryPrice;
-
-  @FXML
-  private TableView<Part> associatedPartsTableView;
-
-  @FXML
-  private TableColumn<Part, Integer> associatedPartId;
-
-  @FXML
-  private TableColumn<Part, String> associatedPartName;
-
-  @FXML
-  private TableColumn<Part, Integer> associatedStockLevel;
-
-  @FXML
-  private TableColumn<Part, Double> associatedPrice;
-
-  /** Add part through modify product UI */
+  /**
+   * Add part through modify product UI
+   */
   @FXML
   void onActionAddPart(ActionEvent event) {
 
     modifiedAssociatedParts.add(inventoryPartsTableView.getSelectionModel().getSelectedItem());
   }
-  /** Delete part through modify product UI */
+
+  /**
+   * Delete part through modify product UI
+   */
   @FXML
   void onActionDeletePart(ActionEvent event) {
 
     if(associatedPartsTableView.getSelectionModel().getSelectedItem() != null) {
-      Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will delete the part permanently, do you want to continue?");
+      Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will remove the part from the product, do you want to continue?");
       alert.setTitle("CONFIRMATION");
 
       Optional<ButtonType> result = alert.showAndWait();
 
       if (result.isPresent() && result.get() == ButtonType.OK) {
         modifiedAssociatedParts.removeAll(associatedPartsTableView.getSelectionModel().getSelectedItem());
-        alert = new Alert(Alert.AlertType.CONFIRMATION, "Test");
-        alert.setTitle("CONFIRMATION");
       }
     }
   }
-  /** Return to main screen through product UI */
+  /**
+   * Return to main screen through product UI
+   */
   @FXML
   void onActionReturnToMainScreen(ActionEvent event) throws IOException {
 
@@ -131,23 +124,26 @@ public class ModifyProductController implements Initializable {
     stage.setScene(new Scene(scene));
     stage.show();
   }
-  /** Save through modify product UI */
+
+  /**
+   * Save through modify product UI
+   */
   @FXML
   void onActionSave(ActionEvent event) throws IOException {
 
-    if (Integer.parseInt(productStockField.getText()) >= Integer.parseInt(productMaxField.getText()) || Integer.parseInt(productStockField.getText()) <= Integer.parseInt(productMinField.getText())) {
+    if (parseInt(productStockField.getText()) >= parseInt(productMaxField.getText()) || parseInt(productStockField.getText()) <= parseInt(productMinField.getText())) {
       Alert alert = new Alert(Alert.AlertType.ERROR);
       alert.setTitle("Error");
       alert.setContentText("Please make sure that inventory number is greater than minimum and less than the maximum value.");
       alert.showAndWait();
     } else {
 
-      int id = Integer.parseInt(productIdField.getText());
+      int id = parseInt(productIdField.getText());
       String name = productNameField.getText();
-      int stock = Integer.parseInt(productStockField.getText());
+      int stock = parseInt(productStockField.getText());
       double price = Double.parseDouble(productPriceField.getText());
-      int min = Integer.parseInt(productMinField.getText());
-      int max = Integer.parseInt(productMaxField.getText());
+      int min = parseInt(productMinField.getText());
+      int max = parseInt(productMaxField.getText());
 
       Inventory.getAllProducts().stream().filter(product -> product.getId() == id).mapToInt(product -> Inventory.getAllProducts().indexOf(product)).forEach(productIndex -> {
         Product modifiedProduct = new Product(id, name, price, stock, min, max);
@@ -161,28 +157,43 @@ public class ModifyProductController implements Initializable {
       stage.show();
     }
   }
-  /** Search through modify product UI */
+
+  /**
+   * Search through modify product UI
+   */
   @FXML
   void onActionSearchPart(ActionEvent event) {
 
     String partInput = partSearchField.getText();
 
     try {
-      int partId = Integer.parseInt(partInput);
+      int partId = valueOf(partInput);
       ObservableList<Part> searchResult = FXCollections.observableArrayList();
       searchResult.add(Inventory.lookupPart(partId));
 
-      if (searchResult.get(0) != null) {
-        inventoryPartsTableView.setItems(searchResult);
+      if (searchResult.get(0) == null) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("ERROR");
+        alert.setContentText("Part not found in search, please enter part");
+        alert.showAndWait();
+        inventoryPartsTableView.setItems(Inventory.getAllParts());
       } else {
         inventoryPartsTableView.setItems(Inventory.getAllParts());
+        inventoryPartsTableView.setItems(searchResult);
       }
     } catch (NumberFormatException e) {
+      Alert alert = new Alert(Alert.AlertType.ERROR);
+      alert.setTitle("ERROR");
+      alert.setContentText("Part input not valid");
+      alert.showAndWait();
       inventoryPartsTableView.setItems(Inventory.lookupPart(partInput));
     }
 
   }
-  /** Send modifications through modify product UI to other windows */
+
+  /**
+   * Send modifications through modify product UI to other windows
+   */
   public void sendProductInfo(Product product) {
 
     // Set the product info fields

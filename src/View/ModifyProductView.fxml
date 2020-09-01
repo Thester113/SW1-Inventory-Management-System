@@ -113,7 +113,7 @@
                                         <Insets bottom="5.0" left="28.5" right="28.5" top="5.0" />
                                     </padding>
                                 </Button>
-                                <TextField fx:id="partSearchField">
+                                <TextField fx:id="partSearchField" onAction="#onActionSearchPart">
                                     <HBox.margin>
                                         <Insets bottom="5.0" top="50.0" />
                                     </HBox.margin>
@@ -159,7 +159,7 @@
                         </TableView>
                         <HBox alignment="CENTER_RIGHT" layoutX="10.0" layoutY="310.0">
                             <children>
-                                <Button mnemonicParsing="false" onAction="#onActionDeletePart" text="Delete">
+                                <Button mnemonicParsing="false" onAction="#onActionDeletePart" text="Remove">
                                     <HBox.margin>
                                         <Insets bottom="5.0" right="60.0" top="5.0" />
                                     </HBox.margin>
