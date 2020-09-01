@@ -59,6 +59,8 @@ public class Inventory {
     allProducts.remove(product);
   }
 
+  public static boolean canDeleteProduct(Product product) { return product.getAssociatedPartsCount() == 0; }
+
   public static ObservableList<Part> getAllParts() {
     return allParts;
   }
