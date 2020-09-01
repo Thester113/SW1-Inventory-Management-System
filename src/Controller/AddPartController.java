@@ -101,41 +101,36 @@ public class AddPartController implements Initializable {
    **/
   @FXML
   void onActionSave(ActionEvent event) throws IOException {
-    try {
-      int id = Inventory.getAllParts().size() + 1;
-      String name = addPartName.getText();
-      double price = Double.parseDouble(addPartPrice.getText());
-      int stock = Integer.parseInt(addPartInventory.getText());
-      int min = Integer.parseInt(addPartMin.getText());
-      int max = Integer.parseInt(addPartMax.getText());
 
-      if (!addPartInHouse.isSelected()) {
+    int id = Inventory.getAllParts().size() + 1;
+    String name = addPartName.getText();
+    double price = Double.parseDouble(addPartPrice.getText());
+    int stock = Integer.parseInt(addPartInventory.getText());
+    int min = Integer.parseInt(addPartMin.getText());
+    int max = Integer.parseInt(addPartMax.getText());
 
-        String companyName = addPartVariableField.getText();
-        Inventory.addPart(new Outsourced(id, name, price, stock, min, max, companyName));
-      } else {
+    if (stock >= max || stock <= min) {
+      Alert alert = new Alert(Alert.AlertType.ERROR);
+      alert.setTitle("Error");
+      alert.setContentText("Please make sure that inventory quantity is greater than minimum and less than the maximum value.");
+      alert.showAndWait();
+    } else {
+
+      if (addPartInHouse.isSelected()) {
 
         int machineId = Integer.parseInt(addPartVariableField.getText());
         Inventory.addPart(new InHouse(id, name, price, stock, min, max, machineId));
+      } else {
+
+        String companyName = addPartVariableField.getText();
+        Inventory.addPart(new Outsourced(id, name, price, stock, min, max, companyName));
       }
-      if (stock >= max || stock <= min) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setContentText("Please make sure that inventory number is greater than minimum and less than the maximum value.");
-        alert.showAndWait();
 
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/view/MainScreen.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
-
-      }
-    } catch (NumberFormatException e) {
-      Alert alert = new Alert(Alert.AlertType.ERROR);
-      alert.setTitle("Error");
-      alert.setContentText("Please enter valid input to save.");
-      alert.showAndWait();
-
+      stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+      scene = FXMLLoader.load(getClass().getResource("/view/MainScreen.fxml"));
+      stage.setScene(new Scene(scene));
+      stage.show();
     }
   }
+
 }
