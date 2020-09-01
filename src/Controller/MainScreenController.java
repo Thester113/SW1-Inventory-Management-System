@@ -131,15 +131,13 @@ public class MainScreenController implements Initializable {
   void onActionDeleteProduct(ActionEvent event) {
     Product product = productTableView.getSelectionModel().getSelectedItem();
     try {
-      if(!canDeleteProduct(product)){
+      if (!canDeleteProduct(product)) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("ERROR!");
         alert.setHeaderText("This product cannot be removed");
         alert.setContentText("This product has parts associated with it. Please remove parts associated with the product and then try again.");
         alert.showAndWait();
-      }
-
-      else {
+      } else {
         if (productTableView.getSelectionModel().getSelectedItem() == null)
           System.out.println("No product selected.");
 
@@ -236,8 +234,20 @@ public class MainScreenController implements Initializable {
       ObservableList<Part> searchResult = FXCollections.observableArrayList();
       searchResult.add(Inventory.lookupPart(partId));
 
-      if (searchResult.get(0) == null) partTableView.setItems(Inventory.getAllParts());
-      else partTableView.setItems(searchResult);
+      if (searchResult.get(0) == null) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("ERROR");
+        alert.setContentText("Part not found in search, please enter part");
+        alert.showAndWait();
+        partTableView.setItems(Inventory.getAllParts());
+
+      } else {
+        partTableView.setItems(searchResult);
+
+      }
+      if (partSearchField.getText().equals("")) {
+        partTableView.setItems(Inventory.getAllParts());
+      }
 
     } catch (NumberFormatException e) {
       Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -262,7 +272,15 @@ public class MainScreenController implements Initializable {
       ObservableList<Product> searchResult = FXCollections.observableArrayList();
       searchResult.add(Inventory.lookupProduct(productId));
 
-      productTableView.setItems(searchResult.get(0) == null ? Inventory.getAllProducts() : searchResult);
+      if (searchResult.get(0) == null) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("ERROR");
+        alert.setContentText("Product not found in search, please enter product");
+        alert.showAndWait();
+        productTableView.setItems(Inventory.getAllProducts());
+      } else {
+        productTableView.setItems(searchResult);
+      }
 
     } catch (NumberFormatException e) {
       Alert alert = new Alert(Alert.AlertType.ERROR);
