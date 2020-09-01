@@ -106,22 +106,21 @@ public class MainScreenController implements Initializable {
    */
   @FXML
   void onActionDeletePart(ActionEvent event) {
-    try {
-      if (partTableView.getSelectionModel().getSelectedItem() != null) {
+    if (partTableView.getSelectionModel().getSelectedItem() != null) {
 
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will delete the part permanently, do you want to continue?");
-        alert.setTitle("CONFIRMATION");
-
-        Optional<ButtonType> result = alert.showAndWait();
-
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-          Inventory.deletePart(partTableView.getSelectionModel().getSelectedItem());
-        }
-      }
-    } catch (NullPointerException e) {
-      Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "No part selected");
+      Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will delete the part permanently, do you want to continue?");
       alert.setTitle("CONFIRMATION");
-      System.out.println("No part selected");
+
+      Optional<ButtonType> result = alert.showAndWait();
+
+      if (result.isPresent() && result.get() == ButtonType.OK) {
+        Inventory.deletePart(partTableView.getSelectionModel().getSelectedItem());
+      }
+    } else {
+      Alert alert = new Alert(Alert.AlertType.INFORMATION, "No part selected");
+      alert.setTitle("INFORMATION");
+      alert.showAndWait();
+
     }
 
 
@@ -192,8 +191,9 @@ public class MainScreenController implements Initializable {
       stage.setScene(new Scene(scene));
       stage.show();
     } catch (NullPointerException e) {
-      System.out.println("Exception: " + e);
-      System.out.println("No part selected!");
+      Alert alert = new Alert(Alert.AlertType.ERROR, "No part selected to modify");
+      alert.setTitle("ERROR");
+      alert.showAndWait();
     }
 
   }
@@ -218,8 +218,9 @@ public class MainScreenController implements Initializable {
       stage.setScene(new Scene(scene));
       stage.show();
     } catch (NullPointerException e) {
-      System.out.println("Exception: " + e);
-      System.out.println("No product selected!");
+      Alert alert = new Alert(Alert.AlertType.ERROR, "No product selected to modify");
+      alert.setTitle("ERROR");
+      alert.showAndWait();
     }
 
   }
