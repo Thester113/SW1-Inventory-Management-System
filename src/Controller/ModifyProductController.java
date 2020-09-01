@@ -109,8 +109,6 @@ public class ModifyProductController implements Initializable {
 
       if (result.isPresent() && result.get() == ButtonType.OK) {
         modifiedAssociatedParts.removeAll(associatedPartsTableView.getSelectionModel().getSelectedItem());
-        alert = new Alert(Alert.AlertType.CONFIRMATION, "Test");
-        alert.setTitle("CONFIRMATION");
       }
     }
   }
@@ -175,6 +173,10 @@ public class ModifyProductController implements Initializable {
       if (searchResult.get(0) != null) {
         inventoryPartsTableView.setItems(searchResult);
       } else {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("ERROR");
+        alert.setContentText("Part number does not exist");
+        alert.showAndWait();
         inventoryPartsTableView.setItems(Inventory.getAllParts());
       }
     } catch (NumberFormatException e) {

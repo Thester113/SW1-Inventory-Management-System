@@ -20,8 +20,37 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import static Model.Inventory.canDeleteProduct;
+
 
 public class MainScreenController implements Initializable {
+  Stage stage;
+  Parent scene;
+  @FXML
+  private TextField partSearchField;
+  @FXML
+  private TableView<Part> partTableView;
+  @FXML
+  private TableColumn<Part, Integer> partIdCol;
+  @FXML
+  private TableColumn<Part, String> partNameCol;
+  @FXML
+  private TableColumn<Part, Integer> partInventoryCol;
+  @FXML
+  private TableColumn<Part, Double> partPriceCol;
+  @FXML
+  private TextField productSearchField;
+  @FXML
+  private TableView<Product> productTableView;
+  @FXML
+  private TableColumn<Product, Integer> productIdCol;
+  @FXML
+  private TableColumn<Product, String> productNameCol;
+  @FXML
+  private TableColumn<Product, Integer> productInventoryCol;
+  @FXML
+  private TableColumn<Product, Double> productPriceCol;
+
   /**
    * Populates tables and columns with values
    */
@@ -45,45 +74,6 @@ public class MainScreenController implements Initializable {
     productPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
 
   }
-
-  Stage stage;
-  Parent scene;
-
-  @FXML
-  private TextField partSearchField;
-
-  @FXML
-  private TableView<Part> partTableView;
-
-  @FXML
-  private TableColumn<Part, Integer> partIdCol;
-
-  @FXML
-  private TableColumn<Part, String> partNameCol;
-
-  @FXML
-  private TableColumn<Part, Integer> partInventoryCol;
-
-  @FXML
-  private TableColumn<Part, Double> partPriceCol;
-
-  @FXML
-  private TextField productSearchField;
-
-  @FXML
-  private TableView<Product> productTableView;
-
-  @FXML
-  private TableColumn<Product, Integer> productIdCol;
-
-  @FXML
-  private TableColumn<Product, String> productNameCol;
-
-  @FXML
-  private TableColumn<Product, Integer> productInventoryCol;
-
-  @FXML
-  private TableColumn<Product, Double> productPriceCol;
 
   /**
    * Adds part through UI
@@ -128,6 +118,8 @@ public class MainScreenController implements Initializable {
         Inventory.deletePart(partTableView.getSelectionModel().getSelectedItem());
       }
     } else {
+      Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "No part selected");
+      alert.setTitle("CONFIRMATION");
       System.out.println("No part selected");
     }
   }
@@ -137,19 +129,28 @@ public class MainScreenController implements Initializable {
    */
   @FXML
   void onActionDeleteProduct(ActionEvent event) {
+    Product product = productTableView.getSelectionModel().getSelectedItem();
     try {
-      if (productTableView.getSelectionModel().getSelectedItem() != null) {
+      if(!canDeleteProduct(product)){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("ERROR!");
+        alert.setHeaderText("This product cannot be removed");
+        alert.setContentText("This product has parts associated with it. Please disassociate those parts and then try again.");
+        alert.showAndWait();
+      }
+
+      else {
+        if (productTableView.getSelectionModel().getSelectedItem() == null)
+          System.out.println("No product selected.");
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will delete the product permanently, do you want to continue?");
         alert.setTitle("CONFIRMATION");
 
         Optional<ButtonType> result = alert.showAndWait();
 
-        if (!result.isPresent() || result.get() != ButtonType.OK) return;
-        Inventory.deleteProduct(productTableView.getSelectionModel().getSelectedItem());
-
-      } else {
-        System.out.println("No product selected.");
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+          Inventory.deleteProduct(productTableView.getSelectionModel().getSelectedItem());
+        }
       }
     } catch (NullPointerException e) {
       Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -235,7 +236,8 @@ public class MainScreenController implements Initializable {
       ObservableList<Part> searchResult = FXCollections.observableArrayList();
       searchResult.add(Inventory.lookupPart(partId));
 
-      partTableView.setItems(searchResult.get(0) == null ? Inventory.getAllParts() : searchResult);
+      if (searchResult.get(0) == null) partTableView.setItems(Inventory.getAllParts());
+      else partTableView.setItems(searchResult);
 
     } catch (NumberFormatException e) {
       Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -261,6 +263,7 @@ public class MainScreenController implements Initializable {
       searchResult.add(Inventory.lookupProduct(productId));
 
       productTableView.setItems(searchResult.get(0) == null ? Inventory.getAllProducts() : searchResult);
+
     } catch (NumberFormatException e) {
       Alert alert = new Alert(Alert.AlertType.ERROR);
       alert.setTitle("Error");
