@@ -22,7 +22,9 @@ import java.util.ResourceBundle;
 
 
 public class MainScreenController implements Initializable {
-  /** Populates tables and columns with values*/
+  /**
+   * Populates tables and columns with values
+   */
   @Override
   public void initialize(URL url, ResourceBundle rb) {
     /* Creates table view with parts */
@@ -83,7 +85,9 @@ public class MainScreenController implements Initializable {
   @FXML
   private TableColumn<Product, Double> productPriceCol;
 
-/** Adds part through UI */
+  /**
+   * Adds part through UI
+   */
   @FXML
   void onActionAddPart(ActionEvent event) throws IOException {
 
@@ -93,7 +97,10 @@ public class MainScreenController implements Initializable {
     stage.show();
 
   }
-  /** Adds product through UI */
+
+  /**
+   * Adds product through UI
+   */
   @FXML
   void onActionAddProduct(ActionEvent event) throws IOException {
 
@@ -103,7 +110,10 @@ public class MainScreenController implements Initializable {
     stage.show();
 
   }
-  /** Deletes part through UI */
+
+  /**
+   * Deletes part through UI
+   */
   @FXML
   void onActionDeletePart(ActionEvent event) {
 
@@ -121,31 +131,48 @@ public class MainScreenController implements Initializable {
       System.out.println("No part selected");
     }
   }
-  /** Deletes product through UI */
+
+  /**
+   * Deletes product through UI
+   */
   @FXML
   void onActionDeleteProduct(ActionEvent event) {
+    try {
+      if (productTableView.getSelectionModel().getSelectedItem() != null) {
 
-    if (productTableView.getSelectionModel().getSelectedItem() != null) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will delete the product permanently, do you want to continue?");
+        alert.setTitle("CONFIRMATION");
 
-      Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will delete the product permanently, do you want to continue?");
-      alert.setTitle("CONFIRMATION");
+        Optional<ButtonType> result = alert.showAndWait();
 
-      Optional<ButtonType> result = alert.showAndWait();
+        if (!result.isPresent() || result.get() != ButtonType.OK) return;
+        Inventory.deleteProduct(productTableView.getSelectionModel().getSelectedItem());
 
-      if (!result.isPresent() || result.get() != ButtonType.OK) return;
-      Inventory.deleteProduct(productTableView.getSelectionModel().getSelectedItem());
-    } else {
-      System.out.println("No product selected.");
+      } else {
+        System.out.println("No product selected.");
+      }
+    } catch (NullPointerException e) {
+      Alert alert = new Alert(Alert.AlertType.ERROR);
+      alert.setTitle("Error");
+      alert.setContentText("user should not delete a product that has a part associated with it .");
+      alert.showAndWait();
+
     }
   }
-  /** Exit the program */
+
+  /**
+   * Exit the program
+   */
   @FXML
   void onActionExit(ActionEvent event) {
 
     System.exit(0);
 
   }
-  /** Modify part through UI */
+
+  /**
+   * Modify part through UI
+   */
   @FXML
   void onActionModifyPart(ActionEvent event) throws IOException {
 
@@ -168,7 +195,10 @@ public class MainScreenController implements Initializable {
     }
 
   }
-  /** Modify product through UI */
+
+  /**
+   * Modify product through UI
+   */
   @FXML
   void onActionModifyProduct(ActionEvent event) throws IOException {
 
@@ -191,7 +221,10 @@ public class MainScreenController implements Initializable {
     }
 
   }
-  /** Search part through UI */
+
+  /**
+   * Search part through UI
+   */
   @FXML
   void onActionPartsSearch(ActionEvent event) {
 
@@ -203,11 +236,20 @@ public class MainScreenController implements Initializable {
       searchResult.add(Inventory.lookupPart(partId));
 
       partTableView.setItems(searchResult.get(0) == null ? Inventory.getAllParts() : searchResult);
+
     } catch (NumberFormatException e) {
+      Alert alert = new Alert(Alert.AlertType.ERROR);
+      alert.setTitle("Error");
+      alert.setContentText("Please enter valid part to search.");
+      alert.showAndWait();
       partTableView.setItems(Inventory.lookupPart(partInput));
+
     }
   }
-  /** Search product through UI */
+
+  /**
+   * Search product through UI
+   */
   @FXML
   void onActionProductsSearch(ActionEvent event) {
 
@@ -220,6 +262,10 @@ public class MainScreenController implements Initializable {
 
       productTableView.setItems(searchResult.get(0) == null ? Inventory.getAllProducts() : searchResult);
     } catch (NumberFormatException e) {
+      Alert alert = new Alert(Alert.AlertType.ERROR);
+      alert.setTitle("Error");
+      alert.setContentText("Please enter valid product to search.");
+      alert.showAndWait();
       productTableView.setItems(Inventory.lookupProduct(productInput));
     }
 
