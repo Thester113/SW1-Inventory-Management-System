@@ -106,22 +106,25 @@ public class MainScreenController implements Initializable {
    */
   @FXML
   void onActionDeletePart(ActionEvent event) {
+    try {
+      if (partTableView.getSelectionModel().getSelectedItem() != null) {
 
-    if (partTableView.getSelectionModel().getSelectedItem() != null) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will delete the part permanently, do you want to continue?");
+        alert.setTitle("CONFIRMATION");
 
-      Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will delete the part permanently, do you want to continue?");
-      alert.setTitle("CONFIRMATION");
+        Optional<ButtonType> result = alert.showAndWait();
 
-      Optional<ButtonType> result = alert.showAndWait();
-
-      if (result.isPresent() && result.get() == ButtonType.OK) {
-        Inventory.deletePart(partTableView.getSelectionModel().getSelectedItem());
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+          Inventory.deletePart(partTableView.getSelectionModel().getSelectedItem());
+        }
       }
-    } else {
+    } catch (NullPointerException e) {
       Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "No part selected");
       alert.setTitle("CONFIRMATION");
       System.out.println("No part selected");
     }
+
+
   }
 
   /**
@@ -153,7 +156,7 @@ public class MainScreenController implements Initializable {
     } catch (NullPointerException e) {
       Alert alert = new Alert(Alert.AlertType.ERROR);
       alert.setTitle("Error");
-      alert.setContentText("user should not delete a product that has a part associated with it .");
+      alert.setContentText("No product selected .");
       alert.showAndWait();
 
     }
