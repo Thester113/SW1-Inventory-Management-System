@@ -2,7 +2,7 @@ package Model;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
+/**Contains logic for add,search,update, and delete parts and products */
 public class Inventory {
   private static final ObservableList<Part> allParts = FXCollections.observableArrayList();
   private static final ObservableList<Product> allProducts = FXCollections.observableArrayList();
@@ -58,8 +58,10 @@ public class Inventory {
   public static void deleteProduct(Product product) {
     allProducts.remove(product);
   }
-
-  public static boolean canDeleteProduct(Product product) { return product.getAssociatedPartsCount() == 0; }
+/** Logic to delete product without a part*/
+  public static boolean canDeleteProduct(Product product) {
+    return product.getAssociatedPartsCount() == 0;
+  }
 
   public static ObservableList<Part> getAllParts() {
     return allParts;

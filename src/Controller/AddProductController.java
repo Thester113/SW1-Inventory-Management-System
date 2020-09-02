@@ -143,7 +143,7 @@ public class AddProductController implements Initializable {
     stage.show();
 
   }
-  /** Saves through product UI */
+  /** Saves through product UI and checks/validates for acceptable Inventory Quantity */
   @FXML
   public void onActionSave(ActionEvent event) throws IOException {
 

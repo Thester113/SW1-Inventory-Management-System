@@ -3,6 +3,7 @@ package Model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+/** Creates setter and getters for product*/
 public class Product {
 
 

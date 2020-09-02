@@ -89,7 +89,7 @@ public class ModifyProductController implements Initializable {
     modifiedAssociatedParts.add(inventoryPartsTableView.getSelectionModel().getSelectedItem());
   }
 
-  /**Delete part through modify product UI*/
+  /**Delete part through modify product UI and confirms deletion */
   @FXML
   public void onActionDeletePart(ActionEvent event) {
 

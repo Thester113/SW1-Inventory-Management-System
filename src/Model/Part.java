@@ -3,6 +3,8 @@ package Model;
 /**
  * @author Tom Hester
  */
+
+/** Creates setter and getters for parts*/
 public abstract class Part {
 
   private int id;

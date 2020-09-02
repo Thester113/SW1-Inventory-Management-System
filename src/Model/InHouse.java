@@ -1,5 +1,5 @@
 package Model;
-
+/** Sets parts InHouse and assigns types */
 public class InHouse extends Part {
 
   private int machineId;

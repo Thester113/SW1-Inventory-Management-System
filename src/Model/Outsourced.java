@@ -1,5 +1,5 @@
 package Model;
-
+/** Sets parts Outsourced and assigns types */
 public class Outsourced extends Part {
 
   private String companyName;

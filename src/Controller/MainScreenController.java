@@ -128,7 +128,7 @@ public class MainScreenController implements Initializable {
   }
 
   /**
-   * Deletes product through UI
+   * Deletes product through UI and checks/validates that part is not associated or that product has been selected
    */
   @FXML
   public void onActionDeleteProduct(ActionEvent event) {
@@ -227,7 +227,8 @@ public class MainScreenController implements Initializable {
   }
 
   /**
-   * Search part through UI
+   * Search part through UI and Checks/Validates part exist or was entered in correctly
+   * * Next Version: Add Ability to search with Part Name or Part ID
    */
   @FXML
   public void onActionPartsSearch(ActionEvent event) {
@@ -269,7 +270,8 @@ public class MainScreenController implements Initializable {
   }
 
   /**
-   * Search product through UI
+   * Search product through UI and Checks/Validates product exist or was entered in correctly
+   * Next Version: Add Ability to search with Product Name or Product ID
    */
   @FXML
   public void onActionProductsSearch(ActionEvent event) {
