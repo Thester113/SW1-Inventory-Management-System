@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 import static Model.Inventory.canDeleteProduct;
 import static java.lang.Integer.*;
 
-
+/**Main user interface controller for parts and products*/
 public class MainScreenController implements Initializable {
   Stage stage;
   Parent scene;
@@ -57,18 +57,18 @@ public class MainScreenController implements Initializable {
    */
   @Override
   public void initialize(URL url, ResourceBundle rb) {
-    /* Creates table view with parts */
+    /** Creates table view with parts */
     partTableView.setItems(Inventory.getAllParts());
-    /* Creates table view with products and values */
+    /** Creates table view with products and values */
     productTableView.setItems(Inventory.getAllProducts());
 
-    /* Adds Parts to columns with values */
+    /** Adds Parts to columns with values */
     partIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
     partNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
     partInventoryCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
     partPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
 
-    /* Adds Products to columns with values */
+    /** Adds Products to columns with values */
     productIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
     productNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
     productInventoryCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
@@ -80,7 +80,7 @@ public class MainScreenController implements Initializable {
    * Adds part through UI
    */
   @FXML
-  void onActionAddPart(ActionEvent event) throws IOException {
+  public void onActionAddPart(ActionEvent event) throws IOException {
 
     stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
     scene = FXMLLoader.load(getClass().getResource("/view/AddPartView.fxml"));
@@ -93,7 +93,7 @@ public class MainScreenController implements Initializable {
    * Adds product through UI
    */
   @FXML
-  void onActionAddProduct(ActionEvent event) throws IOException {
+  public void onActionAddProduct(ActionEvent event) throws IOException {
 
     stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
     scene = FXMLLoader.load(getClass().getResource("/view/AddProductView.fxml"));
@@ -131,7 +131,7 @@ public class MainScreenController implements Initializable {
    * Deletes product through UI
    */
   @FXML
-  void onActionDeleteProduct(ActionEvent event) {
+  public void onActionDeleteProduct(ActionEvent event) {
     Product product = productTableView.getSelectionModel().getSelectedItem();
     try {
       if (!canDeleteProduct(product)) {
@@ -166,7 +166,7 @@ public class MainScreenController implements Initializable {
    * Exit the program
    */
   @FXML
-  void onActionExit(ActionEvent event) {
+  public void onActionExit(ActionEvent event) {
 
     System.exit(0);
 
@@ -176,7 +176,7 @@ public class MainScreenController implements Initializable {
    * Modify part through UI
    */
   @FXML
-  void onActionModifyPart(ActionEvent event) throws IOException {
+  public void onActionModifyPart(ActionEvent event) throws IOException {
 
     try {
 
@@ -203,7 +203,7 @@ public class MainScreenController implements Initializable {
    * Modify product through UI
    */
   @FXML
-  void onActionModifyProduct(ActionEvent event) throws IOException {
+  public void onActionModifyProduct(ActionEvent event) throws IOException {
 
     try {
 
@@ -230,7 +230,7 @@ public class MainScreenController implements Initializable {
    * Search part through UI
    */
   @FXML
-  void onActionPartsSearch(ActionEvent event) {
+  public void onActionPartsSearch(ActionEvent event) {
 
     String partInput = partSearchField.getText();
 
@@ -272,7 +272,7 @@ public class MainScreenController implements Initializable {
    * Search product through UI
    */
   @FXML
-  void onActionProductsSearch(ActionEvent event) {
+  public void onActionProductsSearch(ActionEvent event) {
 
     String productInput = productSearchField.getText();
 

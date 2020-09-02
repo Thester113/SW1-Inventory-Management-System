@@ -23,6 +23,7 @@ import java.util.ResourceBundle;
 import static java.lang.Integer.parseInt;
 import static java.lang.Integer.valueOf;
 
+/**Contains controller methods for modifying products */
 public class ModifyProductController implements Initializable {
   Stage stage;
   Parent scene;
@@ -68,10 +69,10 @@ public class ModifyProductController implements Initializable {
   @Override
   public void initialize(URL url, ResourceBundle rb) {
 
-    // Set Parts table view
+    /** Set Parts table view*/
     inventoryPartsTableView.setItems(Inventory.getAllParts());
 
-    // Fill Parts column with values
+    /** Fill Parts column with values*/
     inventoryPartId.setCellValueFactory(new PropertyValueFactory<>("id"));
     inventoryPartName.setCellValueFactory(new PropertyValueFactory<>("name"));
     inventoryStockLevel.setCellValueFactory(new PropertyValueFactory<>("stock"));
@@ -80,19 +81,17 @@ public class ModifyProductController implements Initializable {
   }
 
   /**
-   * Add part through modify product UI
+    Add part through modify product UI
    */
   @FXML
-  void onActionAddPart(ActionEvent event) {
+  public void onActionAddPart(ActionEvent event) {
 
     modifiedAssociatedParts.add(inventoryPartsTableView.getSelectionModel().getSelectedItem());
   }
 
-  /**
-   * Delete part through modify product UI
-   */
+  /**Delete part through modify product UI*/
   @FXML
-  void onActionDeletePart(ActionEvent event) {
+  public void onActionDeletePart(ActionEvent event) {
 
     if(associatedPartsTableView.getSelectionModel().getSelectedItem() != null) {
       Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will remove the part from the product, do you want to continue?");
@@ -105,11 +104,10 @@ public class ModifyProductController implements Initializable {
       }
     }
   }
-  /**
-   * Return to main screen through product UI
+  /**Return to main screen through product UI
    */
   @FXML
-  void onActionReturnToMainScreen(ActionEvent event) throws IOException {
+  public void onActionReturnToMainScreen(ActionEvent event) throws IOException {
 
     Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Changes wont be saved, do you want to continue?");
     alert.setTitle("CONFIRMATION");
@@ -125,11 +123,10 @@ public class ModifyProductController implements Initializable {
     stage.show();
   }
 
-  /**
-   * Save through modify product UI
+  /**Save through modify product UI
    */
   @FXML
-  void onActionSave(ActionEvent event) throws IOException {
+  public void onActionSave(ActionEvent event) throws IOException {
 
     if (parseInt(productStockField.getText()) >= parseInt(productMaxField.getText()) || parseInt(productStockField.getText()) <= parseInt(productMinField.getText())) {
       Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -158,11 +155,9 @@ public class ModifyProductController implements Initializable {
     }
   }
 
-  /**
-   * Search through modify product UI
-   */
+  /**Search through modify product UI*/
   @FXML
-  void onActionSearchPart(ActionEvent event) {
+  public void onActionSearchPart(ActionEvent event) {
 
     String partInput = partSearchField.getText();
 
@@ -191,12 +186,10 @@ public class ModifyProductController implements Initializable {
 
   }
 
-  /**
-   * Send modifications through modify product UI to other windows
-   */
+  /**Send modifications through modify product UI to other windows*/
   public void sendProductInfo(Product product) {
 
-    // Set the product info fields
+    /** Set the product info fields*/
     productIdField.setText(Integer.toString(product.getId()));
     productNameField.setText(product.getName());
     productStockField.setText(Integer.toString(product.getStock()));
@@ -204,11 +197,11 @@ public class ModifyProductController implements Initializable {
     productMaxField.setText(Integer.toString(product.getMax()));
     productMinField.setText(Integer.toString(product.getMin()));
 
-    // Set the associated parts table view
+    /** Set the associated parts table view*/
     modifiedAssociatedParts.setAll(product.getAllAssociatedParts());
     associatedPartsTableView.setItems(modifiedAssociatedParts);
 
-    // Fill the associated parts column
+    /** Fill the associated parts column*/
 
     associatedPartId.setCellValueFactory(new PropertyValueFactory<>("id"));
     associatedPartName.setCellValueFactory(new PropertyValueFactory<>("name"));

@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
-
+/** Contains methods to add parts*/
 public class AddPartController implements Initializable {
   @Override
   public void initialize(URL url, ResourceBundle rb) {
@@ -60,7 +60,7 @@ public class AddPartController implements Initializable {
 
   /**
    * Adds part through part UI with InHouse
-   **/
+   */
   @FXML
   public void onActionAddPartIn(ActionEvent event) {
 
@@ -69,7 +69,7 @@ public class AddPartController implements Initializable {
 
   /**
    * Adds part through part UI with Outsourced
-   **/
+   */
   @FXML
   void onActionAddPartOut(ActionEvent event) {
 
@@ -78,9 +78,9 @@ public class AddPartController implements Initializable {
 
   /**
    * Return to main screen UI
-   **/
+   */
   @FXML
-  void onActionReturnToMainScreen(ActionEvent event) throws IOException {
+  public void onActionReturnToMainScreen(ActionEvent event) throws IOException {
 
     Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Changes wont be saved, do you want to continue?");
     alert.setTitle("CONFIRMATION");
@@ -98,9 +98,9 @@ public class AddPartController implements Initializable {
 
   /**
    * Saves part through part UI
-   **/
+   */
   @FXML
-  void onActionSave(ActionEvent event) throws IOException {
+  public void onActionSave(ActionEvent event) throws IOException {
 
     int id = Inventory.getAllParts().size() + 1;
     String name = addPartName.getText();
