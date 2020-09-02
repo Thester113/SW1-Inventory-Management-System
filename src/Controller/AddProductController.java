@@ -20,26 +20,26 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-
+/**Contains methods to add products */
 public class AddProductController implements Initializable {
-/** Populates tables and columns with values*/
+
   @Override
   public void initialize(URL url, ResourceBundle rb) {
 
-    // Sets the Parts table view
+    /** Sets the Parts table view*/
     inventoryPartsTableView.setItems(Inventory.getAllParts());
 
-    // Sets the associated parts table view
+    /** Sets the associated parts table view*/
     associatedPartsTableView.setItems(tempAssociatedPartsList);
 
 
-    // Fills the Parts column with values
+    /** Fills the Parts column with values*/
     inventoryPartID.setCellValueFactory(new PropertyValueFactory<>("id"));
     inventoryPartName.setCellValueFactory(new PropertyValueFactory<>("name"));
     inventoryStockLevel.setCellValueFactory(new PropertyValueFactory<>("stock"));
     inventoryPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
 
-    // Fills the associated parts column with values
+    /** Fills the associated parts column with values*/
 
     associatedPartId.setCellValueFactory(new PropertyValueFactory<>("id"));
     associatedPartName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -106,12 +106,12 @@ public class AddProductController implements Initializable {
 
   /**Adds part through product UI*/
   @FXML
-  void onActionAddPart(ActionEvent event) {
+  public void onActionAddPart(ActionEvent event) {
     tempAssociatedPartsList.add(inventoryPartsTableView.getSelectionModel().getSelectedItem());
   }
   /**Deletes part through product UI*/
   @FXML
-  void onActionDeletePart(ActionEvent event) {
+  public void onActionDeletePart(ActionEvent event) {
 
     if (associatedPartsTableView.getSelectionModel().getSelectedItem() != null) {
       Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Part will be permanently deleted, do you want to continue?");
@@ -127,7 +127,7 @@ public class AddProductController implements Initializable {
   }
   /**return to Main Screen through product UI*/
   @FXML
-  void onActionReturnToMainScreen(ActionEvent event) throws IOException {
+  public void onActionReturnToMainScreen(ActionEvent event) throws IOException {
 
     Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Changes wont be saved, do you want to continue?");
     alert.setTitle("CONFIRMATION");
@@ -143,9 +143,9 @@ public class AddProductController implements Initializable {
     stage.show();
 
   }
-  /** Saves through product UI */
+  /** Saves through product UI and checks/validates for acceptable Inventory Quantity */
   @FXML
-  void onActionSave(ActionEvent event) throws IOException {
+  public void onActionSave(ActionEvent event) throws IOException {
 
     int id = Inventory.getAllProducts().size() + 1;
     String name = addProductName.getText();
@@ -173,7 +173,7 @@ public class AddProductController implements Initializable {
   }
   /** Search part through product UI */
   @FXML
-  void onActionSearchProductPart(ActionEvent event) {
+  public void onActionSearchProductPart(ActionEvent event) {
 
     String partInput = addProductPartSearchField.getText();
 

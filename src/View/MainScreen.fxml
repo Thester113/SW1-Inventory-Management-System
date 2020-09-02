@@ -55,7 +55,7 @@
                                         <Insets bottom="5.0" left="28.5" right="28.5" top="5.0" />
                                     </padding>
                                 </Button>
-                                <TextField fx:id="partSearchField" prefHeight="0.0" prefWidth="161.0">
+                                <TextField fx:id="partSearchField" onAction="#onActionPartsSearch" prefHeight="0.0" prefWidth="161.0" promptText="Enter Part ID">
                                     <HBox.margin>
                                         <Insets top="15.0" />
                                     </HBox.margin>
@@ -129,7 +129,7 @@
                                         <Insets bottom="5.0" left="28.5" right="28.5" top="5.0" />
                                     </padding>
                                 </Button>
-                                <TextField fx:id="productSearchField" prefHeight="0.0" prefWidth="161.0">
+                                <TextField fx:id="productSearchField" onAction="#onActionProductsSearch" prefHeight="0.0" prefWidth="161.0" promptText="Enter Product ID">
                                     <HBox.margin>
                                         <Insets top="15.0" />
                                     </HBox.margin>

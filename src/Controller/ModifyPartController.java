@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
-
+/** Contains controller methods for modifying parts */
 public class ModifyPartController implements Initializable {
   @Override
   public void initialize(URL url, ResourceBundle rb) {
@@ -63,19 +63,19 @@ public class ModifyPartController implements Initializable {
   /** Modify part through part UI with InHouse */
 
   @FXML
-  void onActionModPartIn(ActionEvent event) {
+  public void onActionModPartIn(ActionEvent event) {
 
     modPartVariableName.setText("Machine ID:");
   }
   /** Modify part through part UI with Outsourced */
   @FXML
-  void onActionModPartOut(ActionEvent event) {
+  public void onActionModPartOut(ActionEvent event) {
 
     modPartVariableName.setText("Company Name:");
   }
   /** Return to main screen from modify UI */
   @FXML
-  void onActionReturnToMainScreen(ActionEvent event) throws IOException {
+  public void onActionReturnToMainScreen(ActionEvent event) throws IOException {
 
     Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Changes will not be saved, do you want to continue?");
     alert.setTitle("CONFIRMATION");
@@ -93,7 +93,7 @@ public class ModifyPartController implements Initializable {
   }
 /** Save part modification from UI */
   @FXML
-  void onActionSave(ActionEvent event) throws IOException {
+  public void onActionSave(ActionEvent event) throws IOException {
 
 
     if (Integer.parseInt(partStockField.getText()) >= Integer.parseInt(partMaxField.getText()) || Integer.parseInt(partStockField.getText()) <= Integer.parseInt(partMinField.getText())) {
