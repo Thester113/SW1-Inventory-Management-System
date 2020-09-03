@@ -89,7 +89,9 @@ public class ModifyProductController implements Initializable {
     modifiedAssociatedParts.add(inventoryPartsTableView.getSelectionModel().getSelectedItem());
   }
 
-  /**Delete part through modify product UI and confirms deletion */
+  /**Delete part through modify product UI and confirms deletion
+   * (The application confirms the “Delete” and “Remove” actions)
+   * */
   @FXML
   public void onActionDeletePart(ActionEvent event) {
 
@@ -105,6 +107,7 @@ public class ModifyProductController implements Initializable {
     }
   }
   /**Return to main screen through product UI
+   * @exception NullPointerException Changes wont be saved unless saved
    */
   @FXML
   public void onActionReturnToMainScreen(ActionEvent event) throws IOException {
@@ -124,6 +127,7 @@ public class ModifyProductController implements Initializable {
   }
 
   /**Save through modify product UI
+   * Validates or issues error (Min should be less than Max; and Inv should be between those two values.)
    */
   @FXML
   public void onActionSave(ActionEvent event) throws IOException {
@@ -155,7 +159,11 @@ public class ModifyProductController implements Initializable {
     }
   }
 
-  /**Search through modify product UI*/
+  /**Search through modify product UI
+   * Checks for exception if field is empty or part is missing.
+   * (The application will not crash when inappropriate user data is entered in the forms; instead, error messages should be generated.)
+   * @exception NumberFormatException if part input not valid
+   * */
   @FXML
   public void onActionSearchPart(ActionEvent event) {
 

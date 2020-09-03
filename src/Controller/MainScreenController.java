@@ -103,6 +103,7 @@ public class MainScreenController implements Initializable {
 
   /**
    * Deletes part through UI
+   * (The application confirms the “Delete” and “Remove” actions)
    */
   @FXML
   void onActionDeletePart(ActionEvent event) {
@@ -127,7 +128,12 @@ public class MainScreenController implements Initializable {
   }
 
   /**
-   * Deletes product through UI and checks/validates that part is not associated or that product has been selected
+   * Deletes product through UI
+   * Checks/validates NULLPointerException that part is not associated or that product has been selected
+   * (The user should not delete a product that has a part associated with it.)
+   * (The application confirms the “Delete” and “Remove” actions.)
+   * ( The application will not crash when inappropriate user data is entered in the forms;
+   * instead, error messages should be generated.)
    */
   @FXML
   public void onActionDeleteProduct(ActionEvent event) {
@@ -271,6 +277,7 @@ public class MainScreenController implements Initializable {
   /**
    * Search product through UI and Checks/Validates product exist or was entered in correctly
    * Next Version: Add Ability to search with Product Name or Product ID
+   * @exception NumberFormatException if part is not valid.
    */
   @FXML
   public void onActionProductsSearch(ActionEvent event) {

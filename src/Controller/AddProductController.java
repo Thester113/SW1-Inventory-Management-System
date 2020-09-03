@@ -109,7 +109,9 @@ public class AddProductController implements Initializable {
   public void onActionAddPart(ActionEvent event) {
     tempAssociatedPartsList.add(inventoryPartsTableView.getSelectionModel().getSelectedItem());
   }
-  /**Deletes part through product UI*/
+  /**Deletes part through product UI
+   * (The application confirms the “Delete” and “Remove” actions.)
+   * */
   @FXML
   public void onActionDeletePart(ActionEvent event) {
 
@@ -143,35 +145,51 @@ public class AddProductController implements Initializable {
     stage.show();
 
   }
-  /** Saves through product UI and checks/validates for acceptable Inventory Quantity */
+  /** Saves through product UI
+   * Checks/validates for acceptable Inventory Quantity and fields
+   * (Min should be less than Max; and Inv should be between those two values.)
+   *(The application will not crash when inappropriate user data is entered in the forms;
+   * instead, error messages should be generated.)
+   * @exception IOException Not able to save if no fields are filled.
+   * */
   @FXML
   public void onActionSave(ActionEvent event) throws IOException {
+    try{
+      int id = Inventory.getAllProducts().size() + 1;
+      String name = addProductName.getText();
+      double price = Double.parseDouble(addProductPrice.getText());
+      int stock = Integer.parseInt(addProductInventory.getText());
+      int min = Integer.parseInt(addProductMin.getText());
+      int max = Integer.parseInt(addProductMax.getText());
 
-    int id = Inventory.getAllProducts().size() + 1;
-    String name = addProductName.getText();
-    double price = Double.parseDouble(addProductPrice.getText());
-    int stock = Integer.parseInt(addProductInventory.getText());
-    int min = Integer.parseInt(addProductMin.getText());
-    int max = Integer.parseInt(addProductMax.getText());
+      if (stock >= max || stock <= min) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setContentText("Please make sure that inventory quantity is greater than minimum and less than the maximum value.");
+        alert.showAndWait();
+      } else {
+        Inventory.addProduct(new Product(id, name, price, stock, min, max));
 
-    if (stock >= max || stock <= min) {
+        tempAssociatedPartsList.forEach(tempPart -> Inventory.getAllProducts().get(Inventory.getAllProducts().size() - 1).addAssociatedPart(tempPart));
+
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(getClass().getResource("/view/MainScreen.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
+      }
+    }
+    catch (NumberFormatException e){
       Alert alert = new Alert(Alert.AlertType.ERROR);
       alert.setTitle("Error");
-      alert.setContentText("Please make sure that inventory quantity is greater than minimum and less than the maximum value.");
+      alert.setContentText("Please fill out fields to save");
       alert.showAndWait();
-    } else {
-      Inventory.addProduct(new Product(id, name, price, stock, min, max));
-
-      tempAssociatedPartsList.forEach(tempPart -> Inventory.getAllProducts().get(Inventory.getAllProducts().size() - 1).addAssociatedPart(tempPart));
-
-      stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-      scene = FXMLLoader.load(getClass().getResource("/view/MainScreen.fxml"));
-      stage.setScene(new Scene(scene));
-      stage.show();
     }
 
+
   }
-  /** Search part through product UI */
+  /** Search part through product UI
+   * @exception NumberFormatException if part not found.
+   * */
   @FXML
   public void onActionSearchProductPart(ActionEvent event) {
 

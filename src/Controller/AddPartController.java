@@ -98,6 +98,8 @@ public class AddPartController implements Initializable {
 
   /**
    * Saves part through part UI
+   * @exception NumberFormatException Validates or issues error (Min should be less than Max;
+   * and Inv should be between those two values.
    */
   @FXML
   public void onActionSave(ActionEvent event) throws IOException {
