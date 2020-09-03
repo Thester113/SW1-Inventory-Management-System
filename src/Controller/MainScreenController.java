@@ -14,14 +14,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static Model.Inventory.canDeleteProduct;
-import static java.lang.Integer.*;
+import static java.lang.Integer.valueOf;
 
 /**Main user interface controller for parts and products*/
 public class MainScreenController implements Initializable {

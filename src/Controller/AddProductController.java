@@ -182,8 +182,21 @@ public class AddProductController implements Initializable {
       ObservableList<Part> searchResult = FXCollections.observableArrayList();
       searchResult.add(Inventory.lookupPart(partId));
 
-      inventoryPartsTableView.setItems(searchResult.get(0) == null ? Inventory.getAllParts() : searchResult);
+      if (searchResult.get(0) == null) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("ERROR");
+        alert.setContentText("Part not found in search, please enter valid part");
+        alert.showAndWait();
+        inventoryPartsTableView.setItems(Inventory.getAllParts());
+      } else {
+        inventoryPartsTableView.setItems(searchResult);
+      }
+
     } catch (NumberFormatException e) {
+      Alert alert = new Alert(Alert.AlertType.ERROR);
+      alert.setTitle("ERROR");
+      alert.setContentText("Part not found in search, please enter part");
+      alert.showAndWait();
       inventoryPartsTableView.setItems(Inventory.lookupPart(partInput));
     }
 

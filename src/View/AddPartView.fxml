@@ -91,7 +91,7 @@
                         <Insets left="100.0" />
                     </GridPane.margin>
                 </Label>
-                <TextField fx:id="addPartID" disable="true" text="Auto Gen - Disabled" GridPane.columnIndex="1">
+                <TextField fx:id="addPartID" disable="true" text="Auto Generated" GridPane.columnIndex="1">
                     <GridPane.margin>
                         <Insets right="125.0" />
                     </GridPane.margin>
