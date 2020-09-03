@@ -91,7 +91,9 @@ public class ModifyPartController implements Initializable {
     stage.show();
 
   }
-/** Save part modification from UI */
+/** Save part modification from UI
+ * Validates or issues error (Min should be less than Max; and Inv should be between those two values.)
+ * */
   @FXML
   public void onActionSave(ActionEvent event) throws IOException {
 
