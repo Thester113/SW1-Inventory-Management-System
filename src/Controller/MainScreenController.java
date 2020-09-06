@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
@@ -22,7 +23,9 @@ import java.util.ResourceBundle;
 import static Model.Inventory.canDeleteProduct;
 import static java.lang.Integer.valueOf;
 
-/**Main user interface controller for parts and products*/
+/**
+ * This method is the Main user interface controller for parts and products
+ */
 public class MainScreenController implements Initializable {
   Stage stage;
   Parent scene;
@@ -52,7 +55,7 @@ public class MainScreenController implements Initializable {
   private TableColumn<Product, Double> productPriceCol;
 
   /**
-   * Populates tables and columns with values
+   * This method Populates tables and columns with values
    */
   @Override
   public void initialize(URL url, ResourceBundle rb) {
@@ -76,33 +79,45 @@ public class MainScreenController implements Initializable {
   }
 
   /**
-   * Adds part through UI
+   * This method Adds parts through UI
+   *
+   * @throws IOException corrected by letting user know window was not loaded.
    */
   @FXML
-  public void onActionAddPart(ActionEvent event) throws IOException {
-
-    stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-    scene = FXMLLoader.load(getClass().getResource("/view/AddPartView.fxml"));
-    stage.setScene(new Scene(scene));
-    stage.show();
-
+  public void onActionAddPart(ActionEvent event) {
+    try {
+      stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+      scene = FXMLLoader.load(getClass().getResource("/view/AddPartView.fxml"));
+      stage.setScene(new Scene(scene));
+      stage.show();
+    } catch (IOException e) {
+      Alert alert = new Alert(Alert.AlertType.ERROR);
+      alert.setTitle("Error");
+      alert.setContentText("No FXML associated.");
+    }
   }
 
   /**
-   * Adds product through UI
+   * This method Adds products through UI
+   *
+   * @throws IOException corrected by letting user know window was not loaded.
    */
   @FXML
-  public void onActionAddProduct(ActionEvent event) throws IOException {
-
-    stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-    scene = FXMLLoader.load(getClass().getResource("/view/AddProductView.fxml"));
-    stage.setScene(new Scene(scene));
-    stage.show();
-
+  public void onActionAddProduct(ActionEvent event) {
+    try {
+      stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+      scene = FXMLLoader.load(getClass().getResource("/view/AddProductView.fxml"));
+      stage.setScene(new Scene(scene));
+      stage.show();
+    } catch (IOException e) {
+      Alert alert = new Alert(Alert.AlertType.ERROR);
+      alert.setTitle("Error");
+      alert.setContentText("No FXML associated.");
+    }
   }
 
   /**
-   * Deletes part through UI
+   * This method Deletes part through UI
    * (The application confirms the “Delete” and “Remove” actions)
    */
   @FXML
@@ -128,12 +143,13 @@ public class MainScreenController implements Initializable {
   }
 
   /**
-   * Deletes product through UI
-   * Checks/validates NULLPointerException that part is not associated or that product has been selected
-   * (The user should not delete a product that has a part associated with it.)
-   * (The application confirms the “Delete” and “Remove” actions.)
-   * ( The application will not crash when inappropriate user data is entered in the forms;
-   * instead, error messages should be generated.)
+   * This method Deletes product through UI
+   *
+   * @throws NullPointerException is corrected by validating that a part is not associated or that product has been selected
+   *                              (The user should not delete a product that has a part associated with it.)
+   *                              (The application confirms the “Delete” and “Remove” actions.)
+   *                              ( The application will not crash when inappropriate user data is entered in the forms;
+   *                              instead, error messages should be generated.)
    */
   @FXML
   public void onActionDeleteProduct(ActionEvent event) {
@@ -168,7 +184,7 @@ public class MainScreenController implements Initializable {
   }
 
   /**
-   * Exit the program
+   * This method exits the program
    */
   @FXML
   public void onActionExit(ActionEvent event) {
@@ -178,7 +194,10 @@ public class MainScreenController implements Initializable {
   }
 
   /**
-   * Modify part through UI
+   * This method modifies the part through UI
+   *
+   * @throws NullPointerException is corrected by issuing an alert that part is missing to modify
+   * @throws IOException          if fail to load modify part window.
    */
   @FXML
   public void onActionModifyPart(ActionEvent event) throws IOException {
@@ -205,7 +224,10 @@ public class MainScreenController implements Initializable {
   }
 
   /**
-   * Modify product through UI
+   * This method modifies product through UI
+   *
+   * @throws NullPointerException is corrected by issuing an alert that product is missing to modify
+   * @throws IOException          if fail to load modify product window.
    */
   @FXML
   public void onActionModifyProduct(ActionEvent event) throws IOException {
@@ -232,8 +254,10 @@ public class MainScreenController implements Initializable {
   }
 
   /**
-   * Search part through UI and Checks/Validates part exist or was entered in correctly
-   * * Next Version: Add Ability to search with Part Name or Part ID
+   * This method allows a part to be searched through the UI and Checks/Validates part exist or was entered in correctly
+   *
+   * @throws NumberFormatException has been corrected by issuing an alert that part is not valid.
+   *                               * Next Version: Add Ability to search with Part Name or Part ID
    */
   @FXML
   public void onActionPartsSearch(ActionEvent event) {
@@ -277,7 +301,8 @@ public class MainScreenController implements Initializable {
   /**
    * Search product through UI and Checks/Validates product exist or was entered in correctly
    * Next Version: Add Ability to search with Product Name or Product ID
-   * @exception NumberFormatException if part is not valid.
+   *
+   * @throws NumberFormatException is corrected by giving an alert if part is not valid. E.g ID is not found.
    */
   @FXML
   public void onActionProductsSearch(ActionEvent event) {

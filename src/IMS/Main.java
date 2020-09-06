@@ -6,7 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-/**Main class that opens Application */
+/**This class is the Main class that opens the Application */
 public class Main extends Application {
 
   @Override
@@ -17,7 +17,7 @@ public class Main extends Application {
     primaryStage.show();
   }
 
-/**Adds data to test Product and Part*/
+/**This method Adds data to test Product and Part*/
   public static void main(String[] args) {
     Part part1 = new InHouse(1, "Part1", 7.99, 5,1,5, 1234);
     Part part2 = new Outsourced(2,"Part2", 3.44, 7,1,21,"Tom's Farm");

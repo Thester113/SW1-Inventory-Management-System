@@ -16,50 +16,45 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
-/** Contains methods to add parts*/
+
+/**
+ * This class contains methods to add parts
+ */
 public class AddPartController implements Initializable {
+  Stage stage;
+  Parent scene;
+  @FXML
+  private RadioButton addPartInHouse;
+  @FXML
+  private ToggleGroup partSource;
+  @FXML
+  private RadioButton addPartOutsourced;
+  @FXML
+  private Label addPartVariableLabel;
+  @FXML
+  private TextField addPartID;
+  @FXML
+  private TextField addPartName;
+  @FXML
+  private TextField addPartInventory;
+  @FXML
+  private TextField addPartPrice;
+  @FXML
+  private TextField addPartMax;
+  @FXML
+  private TextField addPartMin;
+  @FXML
+  private TextField addPartVariableField;
+  /**
+   * This method Populates tables and columns with values
+   */
   @Override
   public void initialize(URL url, ResourceBundle rb) {
 
   }
 
-  Stage stage;
-  Parent scene;
-
-  @FXML
-  private RadioButton addPartInHouse;
-
-  @FXML
-  private ToggleGroup partSource;
-
-  @FXML
-  private RadioButton addPartOutsourced;
-
-  @FXML
-  private Label addPartVariableLabel;
-
-  @FXML
-  private TextField addPartID;
-  @FXML
-  private TextField addPartName;
-
-  @FXML
-  private TextField addPartInventory;
-
-  @FXML
-  private TextField addPartPrice;
-
-  @FXML
-  private TextField addPartMax;
-
-  @FXML
-  private TextField addPartMin;
-
-  @FXML
-  private TextField addPartVariableField;
-
   /**
-   * Adds part through part UI with InHouse
+   * This method adds parts through part UI with InHouse
    */
   @FXML
   public void onActionAddPartIn(ActionEvent event) {
@@ -68,7 +63,7 @@ public class AddPartController implements Initializable {
   }
 
   /**
-   * Adds part through part UI with Outsourced
+   * This method adds parts through part UI with Outsourced
    */
   @FXML
   void onActionAddPartOut(ActionEvent event) {
@@ -77,7 +72,9 @@ public class AddPartController implements Initializable {
   }
 
   /**
-   * Return to main screen UI
+   * This method returns user to main screen UI
+   *
+   * @throws IOException corrected through alert that changes will not be saved.
    */
   @FXML
   public void onActionReturnToMainScreen(ActionEvent event) throws IOException {
@@ -97,12 +94,13 @@ public class AddPartController implements Initializable {
   }
 
   /**
-   * Saves part through part UI
-   * @exception NumberFormatException Validates or issues error (Min should be less than Max;
-   * and Inv should be between those two values.
+   * This method saves part through part UI
+   * This method throws a NumberFormatException if an invalid value is entered e.g
+   * If a user enters a letter for the price.
    */
   @FXML
-  public void onActionSave(ActionEvent event) throws IOException {
+  public void onActionSave(ActionEvent event) {
+    try{
 
     int id = Inventory.getAllParts().size() + 1;
     String name = addPartName.getText();
@@ -132,6 +130,14 @@ public class AddPartController implements Initializable {
       scene = FXMLLoader.load(getClass().getResource("/view/MainScreen.fxml"));
       stage.setScene(new Scene(scene));
       stage.show();
+    }
+
+    }
+    catch (Exception e){
+      Alert alert = new Alert(Alert.AlertType.ERROR);
+      alert.setTitle("Error");
+      alert.setContentText("Incorrect data types entered");
+      alert.showAndWait();
     }
   }
 

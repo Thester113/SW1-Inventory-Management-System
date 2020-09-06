@@ -23,7 +23,9 @@ import java.util.ResourceBundle;
 import static java.lang.Integer.parseInt;
 import static java.lang.Integer.valueOf;
 
-/**Contains controller methods for modifying products */
+/**
+ * This class contains controller methods for modifying products
+ */
 public class ModifyProductController implements Initializable {
   Stage stage;
   Parent scene;
@@ -64,15 +66,15 @@ public class ModifyProductController implements Initializable {
   private TableColumn<Part, Double> associatedPrice;
 
   /**
-   * Populates tables and columns with values
+   * This method populates tables and columns with values
    */
   @Override
   public void initialize(URL url, ResourceBundle rb) {
 
-    /** Set Parts table view*/
+
     inventoryPartsTableView.setItems(Inventory.getAllParts());
 
-    /** Fill Parts column with values*/
+
     inventoryPartId.setCellValueFactory(new PropertyValueFactory<>("id"));
     inventoryPartName.setCellValueFactory(new PropertyValueFactory<>("name"));
     inventoryStockLevel.setCellValueFactory(new PropertyValueFactory<>("stock"));
@@ -81,7 +83,7 @@ public class ModifyProductController implements Initializable {
   }
 
   /**
-    Add part through modify product UI
+   * This method Adds parts through modify product UI
    */
   @FXML
   public void onActionAddPart(ActionEvent event) {
@@ -89,13 +91,14 @@ public class ModifyProductController implements Initializable {
     modifiedAssociatedParts.add(inventoryPartsTableView.getSelectionModel().getSelectedItem());
   }
 
-  /**Delete part through modify product UI and confirms deletion
+  /**
+   * This method deletes the part through modify product UI and confirms deletion
    * (The application confirms the “Delete” and “Remove” actions)
-   * */
+   */
   @FXML
   public void onActionDeletePart(ActionEvent event) {
 
-    if(associatedPartsTableView.getSelectionModel().getSelectedItem() != null) {
+    if (associatedPartsTableView.getSelectionModel().getSelectedItem() != null) {
       Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will remove the part from the product, do you want to continue?");
       alert.setTitle("CONFIRMATION");
 
@@ -106,8 +109,9 @@ public class ModifyProductController implements Initializable {
       }
     }
   }
-  /**Return to main screen through product UI
-   * @exception NullPointerException Changes wont be saved unless saved
+
+  /**
+   * This method returns to main screen through product UI
    */
   @FXML
   public void onActionReturnToMainScreen(ActionEvent event) throws IOException {
@@ -126,44 +130,54 @@ public class ModifyProductController implements Initializable {
     stage.show();
   }
 
-  /**Save through modify product UI
-   * Validates or issues error (Min should be less than Max; and Inv should be between those two values.)
+  /**
+   * This method saves part through part UI. This method
+   *    @throws NumberFormatException if an invalid value is entered e.g
+   *    * If a user enters a letter for the price.
    */
   @FXML
   public void onActionSave(ActionEvent event) throws IOException {
+    try {
+      if (parseInt(productStockField.getText()) >= parseInt(productMaxField.getText()) || parseInt(productStockField.getText()) <= parseInt(productMinField.getText())) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setContentText("Please make sure that inventory number is greater than minimum and less than the maximum value.");
+        alert.showAndWait();
+      } else {
 
-    if (parseInt(productStockField.getText()) >= parseInt(productMaxField.getText()) || parseInt(productStockField.getText()) <= parseInt(productMinField.getText())) {
+        int id = parseInt(productIdField.getText());
+        String name = productNameField.getText();
+        int stock = parseInt(productStockField.getText());
+        double price = Double.parseDouble(productPriceField.getText());
+        int min = parseInt(productMinField.getText());
+        int max = parseInt(productMaxField.getText());
+
+        Inventory.getAllProducts().stream().filter(product -> product.getId() == id).mapToInt(product -> Inventory.getAllProducts().indexOf(product)).forEach(productIndex -> {
+          Product modifiedProduct = new Product(id, name, price, stock, min, max);
+          modifiedProduct.getAllAssociatedParts().setAll(modifiedAssociatedParts);
+          Inventory.updateProduct(productIndex, modifiedProduct);
+        });
+
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(getClass().getResource("/view/MainScreen.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
+      }
+    }catch (Exception e){
       Alert alert = new Alert(Alert.AlertType.ERROR);
       alert.setTitle("Error");
-      alert.setContentText("Please make sure that inventory number is greater than minimum and less than the maximum value.");
+      alert.setContentText("Incorrect data types entered");
       alert.showAndWait();
-    } else {
-
-      int id = parseInt(productIdField.getText());
-      String name = productNameField.getText();
-      int stock = parseInt(productStockField.getText());
-      double price = Double.parseDouble(productPriceField.getText());
-      int min = parseInt(productMinField.getText());
-      int max = parseInt(productMaxField.getText());
-
-      Inventory.getAllProducts().stream().filter(product -> product.getId() == id).mapToInt(product -> Inventory.getAllProducts().indexOf(product)).forEach(productIndex -> {
-        Product modifiedProduct = new Product(id, name, price, stock, min, max);
-        modifiedProduct.getAllAssociatedParts().setAll(modifiedAssociatedParts);
-        Inventory.updateProduct(productIndex, modifiedProduct);
-      });
-
-      stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-      scene = FXMLLoader.load(getClass().getResource("/view/MainScreen.fxml"));
-      stage.setScene(new Scene(scene));
-      stage.show();
     }
   }
 
-  /**Search through modify product UI
+  /**
+   * This method searches through modify product UI
    * Checks for exception if field is empty or part is missing.
    * (The application will not crash when inappropriate user data is entered in the forms; instead, error messages should be generated.)
-   * @exception NumberFormatException if part input not valid
-   * */
+   *
+   * @throws NumberFormatException is corrected by issuing an alert if part input not valid.
+   */
   @FXML
   public void onActionSearchPart(ActionEvent event) {
 
@@ -194,7 +208,9 @@ public class ModifyProductController implements Initializable {
 
   }
 
-  /**Send modifications through modify product UI to other windows*/
+  /**
+   * This method sends modifications through modify product UI to other windows
+   */
   public void sendProductInfo(Product product) {
 
     /** Set the product info fields*/

@@ -20,9 +20,52 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-/**Contains methods to add products */
+/**
+ * This class contains methods to add products
+ */
 public class AddProductController implements Initializable {
 
+  Stage stage;
+  Parent scene;
+  ObservableList<Part> tempAssociatedPartsList = FXCollections.observableArrayList();
+  @FXML
+  private TextField addProductId;
+  @FXML
+  private TextField addProductName;
+  @FXML
+  private TextField addProductInventory;
+  @FXML
+  private TextField addProductPrice;
+  @FXML
+  private TextField addProductMax;
+  @FXML
+  private TextField addProductMin;
+  @FXML
+  private TextField addProductPartSearchField;
+  @FXML
+  private TableView<Part> inventoryPartsTableView;
+  @FXML
+  private TableColumn<Part, Integer> inventoryPartID;
+  @FXML
+  private TableColumn<Part, String> inventoryPartName;
+  @FXML
+  private TableColumn<Part, Integer> inventoryStockLevel;
+  @FXML
+  private TableColumn<Part, Double> inventoryPrice;
+  @FXML
+  private TableView<Part> associatedPartsTableView;
+  @FXML
+  private TableColumn<Part, Integer> associatedPartId;
+  @FXML
+  private TableColumn<Part, String> associatedPartName;
+  @FXML
+  private TableColumn<Part, Integer> associatedStockLevel;
+  @FXML
+  private TableColumn<Part, Double> associatedPrice;
+
+  /**
+   * This method Populates tables and columns with values
+   */
   @Override
   public void initialize(URL url, ResourceBundle rb) {
 
@@ -49,69 +92,18 @@ public class AddProductController implements Initializable {
 
   }
 
-  Stage stage;
-  Parent scene;
-  ObservableList<Part> tempAssociatedPartsList = FXCollections.observableArrayList();
-
-  @FXML
-  private TextField addProductId;
-
-  @FXML
-  private TextField addProductName;
-
-  @FXML
-  private TextField addProductInventory;
-
-  @FXML
-  private TextField addProductPrice;
-
-  @FXML
-  private TextField addProductMax;
-
-  @FXML
-  private TextField addProductMin;
-
-  @FXML
-  private TextField addProductPartSearchField;
-
-  @FXML
-  private TableView<Part> inventoryPartsTableView;
-
-  @FXML
-  private TableColumn<Part, Integer> inventoryPartID;
-
-  @FXML
-  private TableColumn<Part, String> inventoryPartName;
-
-  @FXML
-  private TableColumn<Part, Integer> inventoryStockLevel;
-
-  @FXML
-  private TableColumn<Part, Double> inventoryPrice;
-
-  @FXML
-  private TableView<Part> associatedPartsTableView;
-
-  @FXML
-  private TableColumn<Part, Integer> associatedPartId;
-
-  @FXML
-  private TableColumn<Part, String> associatedPartName;
-
-  @FXML
-  private TableColumn<Part, Integer> associatedStockLevel;
-
-  @FXML
-  private TableColumn<Part, Double> associatedPrice;
-
-  /**Adds part through product UI*/
+  /**
+   * This method adds a part through product UI
+   */
   @FXML
   public void onActionAddPart(ActionEvent event) {
     tempAssociatedPartsList.add(inventoryPartsTableView.getSelectionModel().getSelectedItem());
   }
-  /**Deletes part through product UI
+
+  /**
+   * Deletes part through product UI
    * (The application confirms the “Delete” and “Remove” actions.)
-   * */
+   */
   @FXML
   public void onActionDeletePart(ActionEvent event) {
 
@@ -127,7 +119,12 @@ public class AddProductController implements Initializable {
       tempAssociatedPartsList.remove(associatedPartsTableView.getSelectionModel().getSelectedItem());
     }
   }
-  /**return to Main Screen through product UI*/
+
+  /**
+   * This method returns user to Main Screen through product UI
+   *
+   * @throws IOException is corrected through confirmation that changes will not be saved.
+   */
   @FXML
   public void onActionReturnToMainScreen(ActionEvent event) throws IOException {
 
@@ -145,16 +142,16 @@ public class AddProductController implements Initializable {
     stage.show();
 
   }
-  /** Saves through product UI
-   * Checks/validates for acceptable Inventory Quantity and fields
-   * (Min should be less than Max; and Inv should be between those two values.)
-   *(The application will not crash when inappropriate user data is entered in the forms;
-   * instead, error messages should be generated.)
-   * @exception IOException Not able to save if no fields are filled.
-   * */
+
+  /**
+   * This method saves part through part UI. This method
+   *
+   * @throws NumberFormatException if an invalid value is entered e.g
+   *                               * If a user enters a letter for the price.
+   */
   @FXML
   public void onActionSave(ActionEvent event) throws IOException {
-    try{
+    try {
       int id = Inventory.getAllProducts().size() + 1;
       String name = addProductName.getText();
       double price = Double.parseDouble(addProductPrice.getText());
@@ -177,8 +174,7 @@ public class AddProductController implements Initializable {
         stage.setScene(new Scene(scene));
         stage.show();
       }
-    }
-    catch (NumberFormatException e){
+    } catch (NumberFormatException e) {
       Alert alert = new Alert(Alert.AlertType.ERROR);
       alert.setTitle("Error");
       alert.setContentText("Please fill out fields to save");
@@ -187,9 +183,13 @@ public class AddProductController implements Initializable {
 
 
   }
-  /** Search part through product UI
-   * @exception NumberFormatException if part not found.
-   * */
+
+  /**
+   * Search part through product UI
+   * This method
+   *
+   * @throws NumberFormatException and  is corrected using an alert for part not found. E.g would be a part number not found in product search
+   */
   @FXML
   public void onActionSearchProductPart(ActionEvent event) {
 
